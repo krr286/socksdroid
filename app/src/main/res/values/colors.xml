@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- ============================================
+         ТЕМА 1: DARK (тёмная синяя, по умолчанию)
+         ============================================ -->
+    <color name="dark_background">#0F1115</color>
+    <color name="dark_surface">#1A1D24</color>
+    <color name="dark_surface_light">#232730</color>
+    <color name="dark_primary">#3B82F6</color>
+    <color name="dark_primary_dark">#2563EB</color>
+    <color name="dark_accent">#22C55E</color>
+    <color name="dark_text_primary">#FFFFFF</color>
+    <color name="dark_text_secondary">#8B95A5</color>
+    <color name="dark_divider">#232730</color>
+    <color name="dark_nav_unselected">#8B95A5</color>
+
+    <!-- ============================================
+         ТЕМА 2: LIGHT (светлая)
+         ============================================ -->
+    <color name="light_background">#F5F7FA</color>
+    <color name="light_surface">#FFFFFF</color>
+    <color name="light_surface_light">#E8ECF1</color>
+    <color name="light_primary">#3B82F6</color>
+    <color name="light_primary_dark">#2563EB</color>
+    <color name="light_accent">#22C55E</color>
+    <color name="light_text_primary">#0F1115</color>
+    <color name="light_text_secondary">#6B7280</color>
+    <color name="light_divider">#E0E4EA</color>
+    <color name="light_nav_unselected">#6B7280</color>
+
+    <!-- ============================================
+         ТЕМА 3: PURPLE (тёмная фиолетовая)
+         ============================================ -->
+    <color name="purple_background">#0F0B1A</color>
+    <color name="purple_surface">#1A1526</color>
+    <color name="purple_surface_light">#231C33</color>
+    <color name="purple_primary">#8B5CF6</color>
+    <color name="purple_primary_dark">#7C3AED</color>
+    <color name="purple_accent">#EC4899</color>
+    <color name="purple_text_primary">#FFFFFF</color>
+    <color name="purple_text_secondary">#A8A0B8</color>
+    <color name="purple_divider">#231C33</color>
+    <color name="purple_nav_unselected">#A8A0B8</color>
+
+    <!-- Общие -->
+    <color name="danger">#EF4444</color>
+
+</resources>
