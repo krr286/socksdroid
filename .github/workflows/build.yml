@@ -1,0 +1,49 @@
+name: Build THEK
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ master ]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java 11
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '11'
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Build Debug APK
+        run: ./gradlew assembleDebug
+
+      - name: Rename APK
+        run: |
+          mkdir -p /tmp/out
+          cp app/build/outputs/apk/debug/*.apk /tmp/out/thek-socksdroid-debug.apk
+          ls -la /tmp/out/
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.0.${{ github.run_number }}
+          name: THEK v1.0.${{ github.run_number }}
+          files: /tmp/out/thek-socksdroid-debug.apk
+          draft: false
+          prerelease: false
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: thek-socksdroid-debug
+          path: app/build/outputs/apk/debug/*.apk
