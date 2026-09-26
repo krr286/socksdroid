@@ -65,4 +65,5 @@
 
     <string name="adv_route_all">Все (по умолчанию)</string>
     <string name="adv_route_non_chn">Non-Chinese IPs</string>
+    <string name="prof_default">По умолчанию</string>
 </resources>
