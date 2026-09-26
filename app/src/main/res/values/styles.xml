@@ -2,7 +2,9 @@
 <resources>
 
     <!-- Базовый стиль, не использовать напрямую -->
-    <style name="AppTheme" parent="@android:style/Theme.Material">
+    <style name="AppTheme" parent="Theme.AppCompat">
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
         <item name="android:statusBarColor">@color/dark_background</item>
         <item name="android:navigationBarColor">@color/dark_surface</item>
     </style>
