@@ -188,8 +188,13 @@ public class HomeFragment extends Fragment implements ServerAdapter.Listener {
             mStatus.setText(mRunning ? "ПОДКЛЮЧЕНО" : "НЕ ЗАЩИЩЕНО");
             mStatus.setTextColor(mRunning ? 0xFF7A3FF7 : 0xFF888888);
         }
-        if (getActivity() instanceof MainActivity) {
-            ((MainActivity) getActivity()).setPowerColor(mRunning);
+
+        if (mConnectBtn != null) {
+            if (mRunning) {
+                mConnectBtn.setBackgroundResource(R.drawable.bg_connect_button_on);
+            } else {
+                mConnectBtn.setBackgroundResource(R.drawable.bg_connect_button);
+            }
         }
 
         if (mStarting && mRunning) mStarting = false;
