@@ -7,7 +7,9 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.net.VpnService;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
@@ -15,11 +17,8 @@ import android.preference.PreferenceFragment;
 import android.preference.ListPreference;
 import android.text.InputType;
 import android.text.TextUtils;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.MenuInflater;
-import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -39,34 +38,30 @@ public class ProfileFragment extends PreferenceFragment implements Preference.On
     private Switch mSwitch;
     private boolean mRunning = false;
     private boolean mStarting = false, mStopping = false;
+
+    private final Handler mHandler = new Handler(Looper.getMainLooper());
+
     private final ServiceConnection mConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName p1, IBinder binder) {
             mBinder = IVpnService.Stub.asInterface(binder);
-
-            try {
-                mRunning = mBinder.isRunning();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            if (mRunning) {
-                updateState();
-            }
+            try { mRunning = mBinder.isRunning(); } catch (Exception e) { e.printStackTrace(); }
+            updateState();
         }
-
         @Override
         public void onServiceDisconnected(ComponentName p1) {
             mBinder = null;
         }
     };
+
     private final Runnable mStateRunnable = new Runnable() {
         @Override
         public void run() {
             updateState();
-            mSwitch.postDelayed(this, 1000);
+            mHandler.postDelayed(this, 1000);
         }
     };
+
     private IVpnService mBinder;
 
     private ListPreference mPrefProfile, mPrefRoutes;
@@ -78,43 +73,24 @@ public class ProfileFragment extends PreferenceFragment implements Preference.On
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.settings);
-        setHasOptionsMenu(true);
         mManager = new ProfileManager(getActivity().getApplicationContext());
         initPreferences();
         reload();
+        mHandler.postDelayed(mStateRunnable, 500);
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.main, menu);
-
-        MenuItem s = menu.findItem(R.id.switch_main);
-        mSwitch = s.getActionView().findViewById(R.id.switch_action_button);
-        mSwitch.setOnCheckedChangeListener(this);
-        mSwitch.postDelayed(mStateRunnable, 1000);
-        checkState();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.prof_add) {
-            addProfile();
-            return true;
-        } else if (id == R.id.prof_del) {
-            removeProfile();
-            return true;
-        } else {
-            return super.onOptionsItemSelected(item);
+    public void onDestroy() {
+        super.onDestroy();
+        mHandler.removeCallbacks(mStateRunnable);
+        if (mBinder != null) {
+            try { getActivity().unbindService(mConnection); } catch (Exception ignored) {}
+            mBinder = null;
         }
     }
 
     @Override
-    public boolean onPreferenceClick(Preference p) {
-        // TODO: Implement this method
-        return false;
-    }
+    public boolean onPreferenceClick(Preference p) { return false; }
 
     @Override
     public boolean onPreferenceChange(Preference p, Object newValue) {
@@ -129,9 +105,7 @@ public class ProfileFragment extends PreferenceFragment implements Preference.On
             resetTextN(mPrefServer, newValue);
             return true;
         } else if (p == mPrefPort) {
-            if (TextUtils.isEmpty(newValue.toString()))
-                return false;
-
+            if (TextUtils.isEmpty(newValue.toString())) return false;
             mProfile.setPort(Integer.parseInt(newValue.toString()));
             resetTextN(mPrefPort, newValue);
             return true;
@@ -155,9 +129,7 @@ public class ProfileFragment extends PreferenceFragment implements Preference.On
             resetTextN(mPrefDns, newValue);
             return true;
         } else if (p == mPrefDnsPort) {
-            if (TextUtils.isEmpty(newValue.toString()))
-                return false;
-
+            if (TextUtils.isEmpty(newValue.toString())) return false;
             mProfile.setDnsPort(Integer.parseInt(newValue.toString()));
             resetTextN(mPrefDnsPort, newValue);
             return true;
@@ -183,24 +155,18 @@ public class ProfileFragment extends PreferenceFragment implements Preference.On
         } else if (p == mPrefAuto) {
             mProfile.setAutoConnect(Boolean.parseBoolean(newValue.toString()));
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 
     @Override
     public void onCheckedChanged(CompoundButton p1, boolean checked) {
-        if (checked) {
-            startVpn();
-        } else {
-            stopVpn();
-        }
+        if (checked) startVpn(); else stopVpn();
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         if (resultCode == Activity.RESULT_OK) {
             Utility.startVpn(getActivity(), mProfile);
             checkState();
@@ -244,9 +210,7 @@ public class ProfileFragment extends PreferenceFragment implements Preference.On
     }
 
     private void reload() {
-        if (mProfile == null) {
-            mProfile = mManager.getDefault();
-        }
+        if (mProfile == null) mProfile = mManager.getDefault();
 
         mPrefProfile.setEntries(mManager.getProfiles());
         mPrefProfile.setEntryValues(mManager.getProfiles());
@@ -274,98 +238,62 @@ public class ProfileFragment extends PreferenceFragment implements Preference.On
     }
 
     private void resetList(ListPreference... pref) {
-        for (ListPreference p : pref)
-            p.setSummary(p.getEntry());
+        for (ListPreference p : pref) p.setSummary(p.getEntry());
     }
-
     private void resetListN(ListPreference pref, Object newValue) {
         pref.setSummary(newValue.toString());
     }
-
     private void resetText(EditTextPreference... pref) {
         for (EditTextPreference p : pref) {
             if ((p.getEditText().getInputType() & InputType.TYPE_TEXT_VARIATION_PASSWORD) != InputType.TYPE_TEXT_VARIATION_PASSWORD) {
                 p.setSummary(p.getText());
             } else {
                 if (p.getText().length() > 0)
-                    p.setSummary(String.format(Locale.US,
-                            String.format(Locale.US, "%%0%dd", p.getText().length()), 0)
-                            .replace("0", "*"));
-                else
-                    p.setSummary("");
+                    p.setSummary(String.format(Locale.US, String.format(Locale.US, "%%0%dd", p.getText().length()), 0).replace("0", "*"));
+                else p.setSummary("");
             }
         }
     }
-
     private void resetTextN(EditTextPreference pref, Object newValue) {
         if ((pref.getEditText().getInputType() & InputType.TYPE_TEXT_VARIATION_PASSWORD) != InputType.TYPE_TEXT_VARIATION_PASSWORD) {
             pref.setSummary(newValue.toString());
         } else {
             String text = newValue.toString();
             if (text.length() > 0)
-                pref.setSummary(String.format(Locale.US,
-                        String.format(Locale.US, "%%0%dd", text.length()), 0)
-                        .replace("0", "*"));
-            else
-                pref.setSummary("");
+                pref.setSummary(String.format(Locale.US, String.format(Locale.US, "%%0%dd", text.length()), 0).replace("0", "*"));
+            else pref.setSummary("");
         }
     }
 
-    private void addProfile() {
+    public void addProfile() {
         final EditText e = new EditText(getActivity());
         e.setSingleLine(true);
 
         new AlertDialog.Builder(getActivity())
-                .setTitle(R.string.prof_add)
-                .setView(e)
-                .setPositiveButton(android.R.string.ok, (d, which) -> {
-                    String name = e.getText().toString().trim();
-
-                    if (!TextUtils.isEmpty(name)) {
-                        Profile p = mManager.addProfile(name);
-
-                        if (p != null) {
-                            mProfile = p;
-                            reload();
-                            return;
-                        }
-                    }
-
-                    Toast.makeText(getActivity(),
-                            String.format(getString(R.string.err_add_prof), name),
-                            Toast.LENGTH_SHORT).show();
-                })
-                .setNegativeButton(android.R.string.cancel, (d, which) -> {
-
-                })
-                .create().show();
+            .setTitle(R.string.prof_add)
+            .setView(e)
+            .setPositiveButton(android.R.string.ok, (d, which) -> {
+                String name = e.getText().toString().trim();
+                if (!TextUtils.isEmpty(name)) {
+                    Profile p = mManager.addProfile(name);
+                    if (p != null) { mProfile = p; reload(); return; }
+                }
+                Toast.makeText(getActivity(), String.format(getString(R.string.err_add_prof), name), Toast.LENGTH_SHORT).show();
+            })
+            .setNegativeButton(android.R.string.cancel, null)
+            .create().show();
     }
 
-    private void removeProfile() {
-        new AlertDialog.Builder(getActivity())
-                .setTitle(R.string.prof_del)
-                .setMessage(String.format(getString(R.string.prof_del_confirm), mProfile.getName()))
-                .setPositiveButton(android.R.string.ok, (d, which) -> {
-                    if (!mManager.removeProfile(mProfile.getName())) {
-                        Toast.makeText(getActivity(),
-                                getString(R.string.err_del_prof, mProfile.getName()),
-                                Toast.LENGTH_SHORT).show();
-                    } else {
-                        mProfile = mManager.getDefault();
-                        reload();
-                    }
-                })
-                .setNegativeButton(android.R.string.cancel, (d, which) -> {
-
-                })
-                .create().show();
+    public void toggleConnect() {
+        if (mRunning) stopVpn(); else startVpn();
     }
 
     private void checkState() {
         mRunning = false;
-        mSwitch.setEnabled(false);
-        mSwitch.setOnCheckedChangeListener(null);
-
+        if (mSwitch != null) {
+            mSwitch.setEnabled(false);
+            mSwitch.setOnCheckedChangeListener(null);
+        }
         if (mBinder == null) {
             getActivity().bindService(new Intent(getActivity(), SocksVpnService.class), mConnection, 0);
         }
@@ -375,56 +303,34 @@ public class ProfileFragment extends PreferenceFragment implements Preference.On
         if (mBinder == null) {
             mRunning = false;
         } else {
-            try {
-                mRunning = mBinder.isRunning();
-            } catch (Exception e) {
-                mRunning = false;
+            try { mRunning = mBinder.isRunning(); } catch (Exception e) { mRunning = false; }
+        }
+
+        if (mSwitch != null) {
+            mSwitch.setChecked(mRunning);
+            if ((!mStarting && !mStopping) || (mStarting && mRunning) || (mStopping && !mRunning)) {
+                mSwitch.setEnabled(true);
             }
+            mSwitch.setOnCheckedChangeListener(ProfileFragment.this);
         }
 
-        mSwitch.setChecked(mRunning);
-
-        if ((!mStarting && !mStopping) || (mStarting && mRunning) || (mStopping && !mRunning)) {
-            mSwitch.setEnabled(true);
-        }
-
-        if (mStarting && mRunning) {
-            mStarting = false;
-        }
-
-        if (mStopping && !mRunning) {
-            mStopping = false;
-        }
-
-        mSwitch.setOnCheckedChangeListener(ProfileFragment.this);
+        if (mStarting && mRunning) mStarting = false;
+        if (mStopping && !mRunning) mStopping = false;
     }
 
     private void startVpn() {
         mStarting = true;
         Intent i = VpnService.prepare(getActivity());
-
-        if (i != null) {
-            startActivityForResult(i, 0);
-        } else {
-            onActivityResult(0, Activity.RESULT_OK, null);
-        }
+        if (i != null) startActivityForResult(i, 0);
+        else onActivityResult(0, Activity.RESULT_OK, null);
     }
 
     private void stopVpn() {
-        if (mBinder == null)
-            return;
-
+        if (mBinder == null) return;
         mStopping = true;
-
-        try {
-            mBinder.stop();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+        try { mBinder.stop(); } catch (Exception e) { e.printStackTrace(); }
         mBinder = null;
-
-        getActivity().unbindService(mConnection);
+        try { getActivity().unbindService(mConnection); } catch (Exception ignored) {}
         checkState();
     }
 }

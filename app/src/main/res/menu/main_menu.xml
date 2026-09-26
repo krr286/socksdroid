@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_add"
+        android:icon="@android:drawable/ic_menu_add"
+        android:title="@string/prof_add"
+        android:showAsAction="always" />
+    <item
+        android:id="@+id/action_power"
+        android:icon="@android:drawable/ic_lock_power_off"
+        android:title="@string/switch_main"
+        android:showAsAction="always" />
+</menu>
