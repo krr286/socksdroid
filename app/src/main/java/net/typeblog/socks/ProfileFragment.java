@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import net.typeblog.socks.util.Profile;
 import net.typeblog.socks.util.ProfileManager;
+import net.typeblog.socks.util.ThemeManager;
 import net.typeblog.socks.util.Utility;
 
 import java.util.Locale;
@@ -105,14 +106,35 @@ public class ProfileFragment extends PreferenceFragment implements Preference.On
         } else if (id == R.id.prof_del) {
             removeProfile();
             return true;
+        } else if (id == R.id.theme) {
+            showThemeDialog();
+            return true;
         } else {
             return super.onOptionsItemSelected(item);
         }
     }
 
+    private void showThemeDialog() {
+        final String[] themes = {
+            getString(R.string.theme_dark),
+            getString(R.string.theme_light),
+            getString(R.string.theme_purple)
+        };
+        int current = ThemeManager.getTheme(getActivity());
+
+        new AlertDialog.Builder(getActivity())
+            .setTitle(R.string.theme_title)
+            .setSingleChoiceItems(themes, current, (dialog, which) -> {
+                ThemeManager.setTheme(getActivity(), which);
+                dialog.dismiss();
+                getActivity().recreate();
+            })
+            .setNegativeButton(android.R.string.cancel, null)
+            .show();
+    }
+
     @Override
     public boolean onPreferenceClick(Preference p) {
-        // TODO: Implement this method
         return false;
     }
 
@@ -131,7 +153,6 @@ public class ProfileFragment extends PreferenceFragment implements Preference.On
         } else if (p == mPrefPort) {
             if (TextUtils.isEmpty(newValue.toString()))
                 return false;
-
             mProfile.setPort(Integer.parseInt(newValue.toString()));
             resetTextN(mPrefPort, newValue);
             return true;
@@ -157,7 +178,6 @@ public class ProfileFragment extends PreferenceFragment implements Preference.On
         } else if (p == mPrefDnsPort) {
             if (TextUtils.isEmpty(newValue.toString()))
                 return false;
-
             mProfile.setDnsPort(Integer.parseInt(newValue.toString()));
             resetTextN(mPrefDnsPort, newValue);
             return true;
@@ -200,7 +220,6 @@ public class ProfileFragment extends PreferenceFragment implements Preference.On
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         if (resultCode == Activity.RESULT_OK) {
             Utility.startVpn(getActivity(), mProfile);
             checkState();
@@ -320,24 +339,19 @@ public class ProfileFragment extends PreferenceFragment implements Preference.On
                 .setView(e)
                 .setPositiveButton(android.R.string.ok, (d, which) -> {
                     String name = e.getText().toString().trim();
-
                     if (!TextUtils.isEmpty(name)) {
                         Profile p = mManager.addProfile(name);
-
                         if (p != null) {
                             mProfile = p;
                             reload();
                             return;
                         }
                     }
-
                     Toast.makeText(getActivity(),
                             String.format(getString(R.string.err_add_prof), name),
                             Toast.LENGTH_SHORT).show();
                 })
-                .setNegativeButton(android.R.string.cancel, (d, which) -> {
-
-                })
+                .setNegativeButton(android.R.string.cancel, (d, which) -> {})
                 .create().show();
     }
 
@@ -355,9 +369,7 @@ public class ProfileFragment extends PreferenceFragment implements Preference.On
                         reload();
                     }
                 })
-                .setNegativeButton(android.R.string.cancel, (d, which) -> {
-
-                })
+                .setNegativeButton(android.R.string.cancel, (d, which) -> {})
                 .create().show();
     }
 
@@ -388,13 +400,8 @@ public class ProfileFragment extends PreferenceFragment implements Preference.On
             mSwitch.setEnabled(true);
         }
 
-        if (mStarting && mRunning) {
-            mStarting = false;
-        }
-
-        if (mStopping && !mRunning) {
-            mStopping = false;
-        }
+        if (mStarting && mRunning) mStarting = false;
+        if (mStopping && !mRunning) mStopping = false;
 
         mSwitch.setOnCheckedChangeListener(ProfileFragment.this);
     }
@@ -402,7 +409,6 @@ public class ProfileFragment extends PreferenceFragment implements Preference.On
     private void startVpn() {
         mStarting = true;
         Intent i = VpnService.prepare(getActivity());
-
         if (i != null) {
             startActivityForResult(i, 0);
         } else {
@@ -411,19 +417,14 @@ public class ProfileFragment extends PreferenceFragment implements Preference.On
     }
 
     private void stopVpn() {
-        if (mBinder == null)
-            return;
-
+        if (mBinder == null) return;
         mStopping = true;
-
         try {
             mBinder.stop();
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         mBinder = null;
-
         getActivity().unbindService(mConnection);
         checkState();
     }

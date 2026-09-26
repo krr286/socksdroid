@@ -1,17 +1,24 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/theme"
+        android:title="🎨 Тема"
+        android:showAsAction="never" />
+
+    <item
         android:id="@+id/prof_add"
-        android:title="@string/prof_add"/>
+        android:title="@string/prof_add"
+        android:showAsAction="never" />
 
     <item
         android:id="@+id/prof_del"
-        android:title="@string/prof_del"/>
+        android:title="@string/prof_del"
+        android:showAsAction="never" />
 
     <item
         android:id="@+id/switch_main"
         android:title="@string/switch_main"
         android:showAsAction="always"
-        android:actionLayout="@layout/action_switch"/>
+        android:actionLayout="@layout/action_switch" />
 
 </menu>
