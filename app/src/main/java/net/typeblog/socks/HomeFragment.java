@@ -196,8 +196,7 @@ public class HomeFragment extends Fragment implements ServerAdapter.Listener {
                     new java.io.InputStreamReader(c.getInputStream()));
                 StringBuilder sb = new StringBuilder();
                 String line;
-                while ((line = br.readLine()) != null) sb.append(line).append("
-");
+                while ((line = br.readLine()) != null) sb.append(line).append("\n");
                 br.close();
                 body = sb.toString();
             } catch (Exception ex) {
@@ -224,8 +223,7 @@ public class HomeFragment extends Fragment implements ServerAdapter.Listener {
         }
 
         int added = 0;
-        String[] lines = data.split("?
-");
+        String[] lines = data.split("\r?\n");
         int n = 1;
         for (String raw : lines) {
             String line = raw.trim();
