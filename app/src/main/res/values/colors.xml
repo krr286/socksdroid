@@ -46,4 +46,5 @@
     <!-- Общие -->
     <color name="danger">#EF4444</color>
 
+    <color name="ic_launcher_background">#7A3FF7</color>
 </resources>

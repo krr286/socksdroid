@@ -56,7 +56,9 @@ public class MainActivity extends AppCompatActivity {
         mCurrentNav = id;
 
         Fragment f;
-        if (id == R.id.nav_settings) {
+        if (id == R.id.nav_servers) {
+            f = new ServersFragment();
+        } else if (id == R.id.nav_settings) {
             f = new SettingsFragment();
         } else if (id == R.id.nav_about) {
             f = new AboutFragment();
