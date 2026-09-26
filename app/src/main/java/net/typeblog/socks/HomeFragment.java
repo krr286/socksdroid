@@ -98,12 +98,13 @@ public class HomeFragment extends Fragment implements ServerAdapter.Listener {
         mProfiles.clear();
         String[] names = mManager.getProfiles();
         String defName = mManager.getDefault().getName();
-        int sel = 0;
+        int sel = -1;
         for (int i = 0; i < names.length; i++) {
+            if ("По умолчанию".equals(names[i])) continue;
             Profile p = mManager.getProfile(names[i]);
             if (p != null) {
                 mProfiles.add(p);
-                if (names[i].equals(defName)) sel = i;
+                if (names[i].equals(defName)) sel = mProfiles.size() - 1;
             }
         }
         mProfile = mManager.getDefault();

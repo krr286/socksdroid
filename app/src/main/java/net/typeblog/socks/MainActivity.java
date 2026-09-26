@@ -16,7 +16,6 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout mDrawer;
     private Toolbar mToolbar;
     private int mCurrentNav = -1;
-    private MenuItem mPowerItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,18 +25,22 @@ public class MainActivity extends AppCompatActivity {
         mDrawer = findViewById(R.id.drawer_layout);
         mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeAsUpIndicator(android.R.drawable.ic_menu_sort_by_size);
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
+
+        mToolbar.setNavigationOnClickListener(v -> mDrawer.openDrawer(GravityCompat.START));
 
         setNav(R.id.nav_home);
+        setNav(R.id.nav_servers);
         setNav(R.id.nav_settings);
         setNav(R.id.nav_about);
 
         if (savedInstanceState == null) {
             selectItem(R.id.nav_home);
         }
-    }
-
-    public void openDrawer() {
-        mDrawer.openDrawer(GravityCompat.START);
     }
 
     private void setNav(int id) {
@@ -55,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
         Fragment f;
         if (id == R.id.nav_settings) {
             f = new SettingsFragment();
+        } else if (id == R.id.nav_about) {
+            f = new AboutFragment();
         } else {
             f = new HomeFragment();
         }
@@ -70,29 +75,17 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
-        mPowerItem = menu.findItem(R.id.action_power);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Fragment f = getFragmentManager().findFragmentById(R.id.fragment_container);
-        int id = item.getItemId();
-
-        if (id == R.id.action_add) {
+        if (item.getItemId() == R.id.action_add) {
             if (f instanceof HomeFragment) ((HomeFragment) f).addServer();
-            return true;
-        } else if (id == R.id.action_power) {
-            if (f instanceof HomeFragment) ((HomeFragment) f).toggleConnect();
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    public void setPowerColor(boolean running) {
-        if (mPowerItem == null || mPowerItem.getIcon() == null) return;
-        int color = running ? 0xFF7A3FF7 : 0xFF888888;
-        mPowerItem.getIcon().setColorFilter(color, android.graphics.PorterDuff.Mode.SRC_IN);
     }
 
     @Override

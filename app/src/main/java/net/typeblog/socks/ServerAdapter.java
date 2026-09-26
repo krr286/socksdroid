@@ -46,6 +46,7 @@ public class ServerAdapter extends RecyclerView.Adapter<ServerAdapter.VH> {
         Profile p = mData.get(pos);
         h.name.setText(p.getName());
         h.addr.setText(p.getServer() + ":" + p.getPort());
+        h.flag.setText(flagFor(p.getServer()));
         h.check.setVisibility(pos == mSelected ? View.VISIBLE : View.INVISIBLE);
 
         h.itemView.setOnClickListener(v -> mListener.onSelect(p));
@@ -57,6 +58,21 @@ public class ServerAdapter extends RecyclerView.Adapter<ServerAdapter.VH> {
 
     @Override
     public int getItemCount() { return mData.size(); }
+
+    private static String flagFor(String ip) {
+        if (ip == null) return "\uD83C\uDF10";
+        String first = ip.contains(".") ? ip.substring(0, ip.indexOf('.')) : ip;
+        int a;
+        try { a = Integer.parseInt(first); } catch (Exception e) { return "\uD83C\uDF10"; }
+
+        if (a == 138 || a == 41 || a == 156 || a == 197) return "\uD83C\uDDEA\uD83C\uDDEC";
+        if (a >= 80 && a <= 95)  return "\uD83C\uDDE9\uD83C\uDDEA";
+        if (a >= 176 && a <= 185) return "\uD83C\uDDF7\uD83C\uDDFA";
+        if (a >= 5 && a <= 37) return "\uD83C\uDDEE\uD83C\uDDF9";
+        if (a >= 51 && a <= 54) return "\uD83C\uDDEB\uD83C\uDDF7";
+        if (a >= 100 && a <= 126) return "\uD83C\uDDFA\uD83C\uDDF8";
+        return "\uD83C\uDF10";
+    }
 
     static class VH extends RecyclerView.ViewHolder {
         TextView name, addr, check, flag;
