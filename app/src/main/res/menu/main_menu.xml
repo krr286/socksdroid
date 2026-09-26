@@ -2,12 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/action_add"
-        android:icon="@drawable/ic_add_circle"
-        android:title="@string/prof_add"
+        android:icon="@android:drawable/ic_menu_add"
+        android:title="Добавить сервер"
         android:showAsAction="always" />
     <item
         android:id="@+id/action_power"
-        android:icon="@drawable/ic_power_circle"
-        android:title="@string/switch_main"
+        android:icon="@drawable/ic_power_circle_big"
+        android:title="Вкл/Выкл"
         android:showAsAction="always" />
 </menu>
