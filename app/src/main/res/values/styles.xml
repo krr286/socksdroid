@@ -9,6 +9,7 @@
 
     <!-- ТЕМА 1: DARK -->
     <style name="AppTheme.Dark" parent="AppTheme">
+        <item name="android:actionBarSize">40dp</item>
         <item name="android:colorPrimary">@color/dark_primary</item>
         <item name="android:colorPrimaryDark">@color/dark_background</item>
         <item name="android:colorAccent">@color/dark_primary</item>

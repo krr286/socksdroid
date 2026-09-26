@@ -2,12 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/action_add"
-        android:icon="@android:drawable/ic_menu_add"
+        android:icon="@drawable/ic_add_circle"
         android:title="@string/prof_add"
         android:showAsAction="always" />
     <item
         android:id="@+id/action_power"
-        android:icon="@android:drawable/ic_lock_power_off"
+        android:icon="@drawable/ic_power_circle"
         android:title="@string/switch_main"
         android:showAsAction="always" />
 </menu>

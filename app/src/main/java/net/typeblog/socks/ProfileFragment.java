@@ -266,19 +266,49 @@ public class ProfileFragment extends PreferenceFragment implements Preference.On
     }
 
     public void addProfile() {
-        final EditText e = new EditText(getActivity());
-        e.setSingleLine(true);
+        android.view.View view = android.view.LayoutInflater.from(getActivity())
+                .inflate(R.layout.dialog_server, null);
+        final EditText eName = view.findViewById(R.id.dlg_name);
+        final EditText eServer = view.findViewById(R.id.dlg_server);
+        final EditText ePort = view.findViewById(R.id.dlg_port);
+        final EditText eUser = view.findViewById(R.id.dlg_user);
+        final EditText ePass = view.findViewById(R.id.dlg_pass);
+        ePort.setText("1080");
 
         new AlertDialog.Builder(getActivity())
             .setTitle(R.string.prof_add)
-            .setView(e)
+            .setView(view)
             .setPositiveButton(android.R.string.ok, (d, which) -> {
-                String name = e.getText().toString().trim();
-                if (!TextUtils.isEmpty(name)) {
-                    Profile p = mManager.addProfile(name);
-                    if (p != null) { mProfile = p; reload(); return; }
+                String name = eName.getText().toString().trim();
+                String srv = eServer.getText().toString().trim();
+                String port = ePort.getText().toString().trim();
+                String user = eUser.getText().toString().trim();
+                String pass = ePass.getText().toString().trim();
+
+                if (TextUtils.isEmpty(name)) {
+                    Toast.makeText(getActivity(), "Введи название", Toast.LENGTH_SHORT).show();
+                    return;
                 }
-                Toast.makeText(getActivity(), String.format(getString(R.string.err_add_prof), name), Toast.LENGTH_SHORT).show();
+                if (TextUtils.isEmpty(srv) || TextUtils.isEmpty(port)) {
+                    Toast.makeText(getActivity(), "Введи IP и порт", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                Profile p = mManager.addProfile(name);
+                if (p == null) {
+                    Toast.makeText(getActivity(), String.format(getString(R.string.err_add_prof), name), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                p.setServer(srv);
+                try { p.setPort(Integer.parseInt(port)); } catch (Exception ex) { p.setPort(1080); }
+                p.setIsUserpw(!TextUtils.isEmpty(user));
+                p.setUsername(user);
+                p.setPassword(pass);
+
+                mProfile = p;
+                mManager.switchDefault(name);
+                reload();
             })
             .setNegativeButton(android.R.string.cancel, null)
             .create().show();
@@ -312,6 +342,10 @@ public class ProfileFragment extends PreferenceFragment implements Preference.On
                 mSwitch.setEnabled(true);
             }
             mSwitch.setOnCheckedChangeListener(ProfileFragment.this);
+        }
+
+        if (getActivity() instanceof MainActivity) {
+            ((MainActivity) getActivity()).updatePowerIcon(mRunning);
         }
 
         if (mStarting && mRunning) mStarting = false;

@@ -3,7 +3,7 @@
 
     <string name="app_name">THEK</string>
 
-    <string name="profile">Профиль</string>
+    <string name="profile">Сервера</string>
     <string name="prof_default">По умолчанию</string>
 
     <string name="connection">Подключение</string>
