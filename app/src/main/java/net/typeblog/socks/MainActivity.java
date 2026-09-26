@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
         setNav(R.id.nav_home);
         setNav(R.id.nav_servers);
+        setNav(R.id.nav_theme);
         setNav(R.id.nav_settings);
         setNav(R.id.nav_about);
 
