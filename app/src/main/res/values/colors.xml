@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- ============================================
-         ТЕМА 1: DARK (тёмная синяя, по умолчанию)
-         ============================================ -->
+    <!-- DARK -->
     <color name="dark_background">#0F1115</color>
     <color name="dark_surface">#1A1D24</color>
     <color name="dark_surface_light">#232730</color>
@@ -15,9 +13,7 @@
     <color name="dark_divider">#232730</color>
     <color name="dark_nav_unselected">#8B95A5</color>
 
-    <!-- ============================================
-         ТЕМА 2: LIGHT (светлая)
-         ============================================ -->
+    <!-- LIGHT -->
     <color name="light_background">#F5F7FA</color>
     <color name="light_surface">#FFFFFF</color>
     <color name="light_surface_light">#E8ECF1</color>
@@ -29,9 +25,7 @@
     <color name="light_divider">#E0E4EA</color>
     <color name="light_nav_unselected">#6B7280</color>
 
-    <!-- ============================================
-         ТЕМА 3: PURPLE (тёмная фиолетовая)
-         ============================================ -->
+    <!-- PURPLE -->
     <color name="purple_background">#0F0B1A</color>
     <color name="purple_surface">#1A1526</color>
     <color name="purple_surface_light">#231C33</color>
@@ -45,5 +39,8 @@
 
     <!-- Общие -->
     <color name="danger">#EF4444</color>
+    <color name="accent_green">#22C55E</color>
+    <color name="accent_red">#EF4444</color>
+    <color name="accent_orange">#F59E0B</color>
 
 </resources>

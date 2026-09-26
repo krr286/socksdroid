@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:attr/colorBackground">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="32dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="THEK"
+            android:textColor="@color/dark_primary"
+            android:textSize="48sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.2"
+            android:fontFamily="sans-serif-black"
+            android:layout_marginTop="40dp" />
+
+        <TextView
+            android:id="@+id/about_version"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="v1.0.4"
+            android:textColor="@color/dark_text_secondary"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/about_desc"
+            android:textColor="@color/dark_text_primary"
+            android:textSize="15sp"
+            android:gravity="center"
+            android:layout_marginTop="32dp"
+            android:paddingHorizontal="24dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/about_support"
+            android:textColor="@color/dark_primary"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginTop="48dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="16dp"
+            android:background="?android:attr/selectableItemBackground" />
+
+    </LinearLayout>
+</ScrollView>

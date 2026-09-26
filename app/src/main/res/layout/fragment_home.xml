@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Верхняя панель с кнопками + и ⚙ -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end">
+
+        <ImageButton
+            android:id="@+id/btn_add"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_add"
+            android:contentDescription="@string/add_server" />
+
+        <ImageButton
+            android:id="@+id/btn_settings"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="8dp"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_settings"
+            android:contentDescription="@string/settings_title" />
+    </LinearLayout>
+
+    <!-- Кнопка Connect -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <FrameLayout
+                android:id="@+id/connect_button_container"
+                android:layout_width="220dp"
+                android:layout_height="220dp">
+
+                <View
+                    android:id="@+id/connect_ring"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg_connect_ring" />
+
+                <LinearLayout
+                    android:id="@+id/connect_button"
+                    android:layout_width="180dp"
+                    android:layout_height="180dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/bg_connect_button"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:id="@+id/connect_icon"
+                        android:layout_width="72dp"
+                        android:layout_height="72dp"
+                        android:src="@drawable/ic_power" />
+
+                    <TextView
+                        android:id="@+id/connect_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/connect"
+                        android:textColor="@android:color/white"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.1" />
+                </LinearLayout>
+
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/connect_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="@string/not_connected"
+                android:textColor="@color/dark_text_secondary"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+    </FrameLayout>
+
+    <!-- Заголовок серверов -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/servers_title"
+        android:textColor="@color/dark_text_secondary"
+        android:textSize="13sp"
+        android:textAllCaps="true"
+        android:letterSpacing="0.15"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp" />
+
+    <!-- Список серверов -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/servers_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxHeight="200dp"
+        android:clipToPadding="false" />
+
+    <TextView
+        android:id="@+id/no_servers"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/no_servers"
+        android:textColor="@color/dark_text_secondary"
+        android:textSize="13sp"
+        android:gravity="center"
+        android:padding="24dp"
+        android:visibility="gone" />
+
+</LinearLayout>

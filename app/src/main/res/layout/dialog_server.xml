@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <EditText
+        android:id="@+id/dlg_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Название (например, Египет #1)"
+        android:inputType="text"
+        android:textColor="@color/dark_text_primary"
+        android:textColorHint="@color/dark_text_secondary"
+        android:layout_marginBottom="8dp" />
+
+    <EditText
+        android:id="@+id/dlg_ip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="IP сервера"
+        android:inputType="textUri"
+        android:textColor="@color/dark_text_primary"
+        android:textColorHint="@color/dark_text_secondary"
+        android:layout_marginBottom="8dp" />
+
+    <EditText
+        android:id="@+id/dlg_port"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Порт (8000)"
+        android:inputType="number"
+        android:textColor="@color/dark_text_primary"
+        android:textColorHint="@color/dark_text_secondary"
+        android:layout_marginBottom="8dp" />
+
+    <EditText
+        android:id="@+id/dlg_user"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Логин (если нужен)"
+        android:inputType="text"
+        android:textColor="@color/dark_text_primary"
+        android:textColorHint="@color/dark_text_secondary"
+        android:layout_marginBottom="8dp" />
+
+    <EditText
+        android:id="@+id/dlg_pass"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Пароль (если нужен)"
+        android:inputType="textPassword"
+        android:textColor="@color/dark_text_primary"
+        android:textColorHint="@color/dark_text_secondary" />
+
+</LinearLayout>

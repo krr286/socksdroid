@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:attr/colorBackground">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/settings_theme"
+            android:textColor="@color/dark_text_secondary"
+            android:textSize="13sp"
+            android:textAllCaps="true"
+            android:letterSpacing="0.15"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp" />
+
+        <RadioGroup
+            android:id="@+id/theme_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RadioButton
+                android:id="@+id/theme_dark"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/theme_dark"
+                android:padding="12dp"
+                android:textColor="@color/dark_text_primary" />
+
+            <RadioButton
+                android:id="@+id/theme_light"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/theme_light"
+                android:padding="12dp"
+                android:textColor="@color/dark_text_primary" />
+
+            <RadioButton
+                android:id="@+id/theme_purple"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/theme_purple"
+                android:padding="12dp"
+                android:textColor="@color/dark_text_primary" />
+        </RadioGroup>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/dark_divider"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="DNS"
+            android:textColor="@color/dark_text_secondary"
+            android:textSize="13sp"
+            android:textAllCaps="true"
+            android:letterSpacing="0.15"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp" />
+
+        <EditText
+            android:id="@+id/settings_dns"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/settings_dns"
+            android:textColor="@color/dark_text_primary"
+            android:textColorHint="@color/dark_text_secondary"
+            android:padding="12dp"
+            android:background="@drawable/bg_input" />
+
+        <EditText
+            android:id="@+id/settings_dns_port"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/settings_dns_port"
+            android:inputType="number"
+            android:textColor="@color/dark_text_primary"
+            android:textColorHint="@color/dark_text_secondary"
+            android:padding="12dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_input" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/dark_divider"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Маршрутизация"
+            android:textColor="@color/dark_text_secondary"
+            android:textSize="13sp"
+            android:textAllCaps="true"
+            android:letterSpacing="0.15"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp" />
+
+        <Spinner
+            android:id="@+id/settings_route"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@drawable/bg_input"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/dark_divider"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Дополнительно"
+            android:textColor="@color/dark_text_secondary"
+            android:textSize="13sp"
+            android:textAllCaps="true"
+            android:letterSpacing="0.15"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp" />
+
+        <Switch
+            android:id="@+id/settings_ipv6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/settings_ipv6"
+            android:textColor="@color/dark_text_primary"
+            android:padding="12dp" />
+
+        <Switch
+            android:id="@+id/settings_udp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/settings_udp"
+            android:textColor="@color/dark_text_primary"
+            android:padding="12dp" />
+
+        <Switch
+            android:id="@+id/settings_auto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/settings_auto"
+            android:textColor="@color/dark_text_primary"
+            android:padding="12dp" />
+
+    </LinearLayout>
+</ScrollView>
