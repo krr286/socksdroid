@@ -1,54 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <!-- Базовый стиль, не использовать напрямую -->
     <style name="AppTheme" parent="Theme.AppCompat">
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
-        <item name="android:statusBarColor">@color/dark_background</item>
-        <item name="android:navigationBarColor">@color/dark_surface</item>
+        <item name="android:actionBarSize">40dp</item>
     </style>
 
-    <!-- ТЕМА 1: DARK -->
     <style name="AppTheme.Dark" parent="AppTheme">
-        <item name="android:actionBarSize">40dp</item>
-        <item name="android:colorPrimary">@color/dark_primary</item>
-        <item name="android:colorPrimaryDark">@color/dark_background</item>
-        <item name="android:colorAccent">@color/dark_primary</item>
+        <item name="colorPrimary">@color/dark_primary</item>
+        <item name="colorPrimaryDark">@color/dark_background</item>
+        <item name="colorAccent">@color/dark_primary</item>
         <item name="android:windowBackground">@color/dark_background</item>
         <item name="android:textColorPrimary">@color/dark_text_primary</item>
-        <item name="android:textColorSecondary">@color/dark_text_secondary</item>
-        <item name="android:statusBarColor">@color/dark_background</item>
-        <item name="android:navigationBarColor">@color/dark_surface</item>
     </style>
 
-    <!-- ТЕМА 2: LIGHT -->
     <style name="AppTheme.Light" parent="AppTheme">
-        <item name="android:colorPrimary">@color/light_primary</item>
-        <item name="android:colorPrimaryDark">@color/light_primary_dark</item>
-        <item name="android:colorAccent">@color/light_primary</item>
+        <item name="colorPrimary">@color/light_primary</item>
+        <item name="colorPrimaryDark">@color/light_primary_dark</item>
+        <item name="colorAccent">@color/light_primary</item>
         <item name="android:windowBackground">@color/light_background</item>
         <item name="android:textColorPrimary">@color/light_text_primary</item>
-        <item name="android:textColorSecondary">@color/light_text_secondary</item>
-        <item name="android:statusBarColor">@color/light_background</item>
-        <item name="android:navigationBarColor">@color/light_surface</item>
-        <item name="android:windowLightStatusBar">true</item>
     </style>
 
-    <!-- ТЕМА 3: PURPLE -->
     <style name="AppTheme.Purple" parent="AppTheme">
-        <item name="android:colorPrimary">@color/purple_primary</item>
-        <item name="android:colorPrimaryDark">@color/purple_background</item>
-        <item name="android:colorAccent">@color/purple_primary</item>
+        <item name="colorPrimary">@color/purple_primary</item>
+        <item name="colorPrimaryDark">@color/purple_primary_dark</item>
+        <item name="colorAccent">@color/purple_primary</item>
         <item name="android:windowBackground">@color/purple_background</item>
         <item name="android:textColorPrimary">@color/purple_text_primary</item>
-        <item name="android:textColorSecondary">@color/purple_text_secondary</item>
-        <item name="android:statusBarColor">@color/purple_background</item>
-        <item name="android:navigationBarColor">@color/purple_surface</item>
     </style>
 
-    <style name="CardStyle">
-        <item name="android:padding">16dp</item>
+    <style name="AppTheme.Pink" parent="AppTheme">
+        <item name="colorPrimary">@color/pink_primary</item>
+        <item name="colorPrimaryDark">@color/pink_primary_dark</item>
+        <item name="colorAccent">@color/pink_primary</item>
+        <item name="android:windowBackground">@color/pink_background</item>
+        <item name="android:textColorPrimary">@color/pink_text_primary</item>
     </style>
 
+    <style name="AppTheme.Turquoise" parent="AppTheme">
+        <item name="colorPrimary">@color/turquoise_primary</item>
+        <item name="colorPrimaryDark">@color/turquoise_primary_dark</item>
+        <item name="colorAccent">@color/turquoise_primary</item>
+        <item name="android:windowBackground">@color/turquoise_background</item>
+        <item name="android:textColorPrimary">@color/turquoise_text_primary</item>
+    </style>
+
+    <style name="AppTheme.Orange" parent="AppTheme">
+        <item name="colorPrimary">@color/orange_primary</item>
+        <item name="colorPrimaryDark">@color/orange_primary_dark</item>
+        <item name="colorAccent">@color/orange_primary</item>
+        <item name="android:windowBackground">@color/orange_background</item>
+        <item name="android:textColorPrimary">@color/orange_text_primary</item>
+    </style>
 </resources>

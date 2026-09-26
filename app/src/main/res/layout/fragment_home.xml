@@ -10,6 +10,12 @@
         android:src="@drawable/home_bg_placeholder"
         android:scaleType="centerCrop"
         android:alpha="0.25" />
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/home_pattern"
+        android:scaleType="centerCrop" />
+
 
     <LinearLayout
         android:layout_width="match_parent"

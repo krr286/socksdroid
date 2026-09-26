@@ -48,6 +48,12 @@
                 android:src="@drawable/drawer_bg_placeholder"
                 android:scaleType="centerCrop"
                 android:alpha="0.55" />
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/drawer_pattern"
+                android:scaleType="centerCrop" />
+
 
             <TextView
                 android:layout_width="wrap_content"
@@ -109,6 +115,18 @@
             android:layout_marginStart="24dp"
             android:layout_marginEnd="24dp"
             android:background="#33FFFFFF" />
+
+        <LinearLayout
+            android:id="@+id/nav_theme"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingStart="24dp"
+            android:background="?android:attr/selectableItemBackground">
+            <ImageView android:layout_width="22dp" android:layout_height="22dp" android:src="@drawable/ic_nav_settings" android:tint="#7A3FF7" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="18dp" android:text="Тема" android:textColor="#FFFFFF" android:textSize="15sp" />
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/nav_settings"

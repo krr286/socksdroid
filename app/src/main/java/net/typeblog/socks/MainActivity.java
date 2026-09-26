@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        ThemeManager.apply(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -49,29 +50,34 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void selectItem(int id) {
-        if (mCurrentNav == id) {
-            mDrawer.closeDrawers();
-            return;
-        }
+        if (mCurrentNav == id) { mDrawer.closeDrawers(); return; }
         mCurrentNav = id;
 
         Fragment f;
-        if (id == R.id.nav_servers) {
-            f = new ServersFragment();
-        } else if (id == R.id.nav_settings) {
-            f = new SettingsFragment();
-        } else if (id == R.id.nav_about) {
-            f = new AboutFragment();
-        } else {
-            f = new HomeFragment();
-        }
+        if (id == R.id.nav_servers) f = new ServersFragment();
+        else if (id == R.id.nav_settings) f = new SettingsFragment();
+        else if (id == R.id.nav_about) f = new AboutFragment();
+        else if (id == R.id.nav_theme) { showThemeDialog(); mDrawer.closeDrawers(); return; }
+        else f = new HomeFragment();
 
-        getFragmentManager()
-            .beginTransaction()
-            .replace(R.id.fragment_container, f)
-            .commit();
-
+        getFragmentManager().beginTransaction().replace(R.id.fragment_container, f).commit();
         mDrawer.closeDrawers();
+    }
+
+    private void showThemeDialog() {
+        String cur = ThemeManager.get(this);
+        int idx = 0;
+        for (int i = 0; i < ThemeManager.KEYS.length; i++) if (ThemeManager.KEYS[i].equals(cur)) idx = i;
+
+        new android.app.AlertDialog.Builder(this)
+            .setTitle("Тема")
+            .setSingleChoiceItems(ThemeManager.NAMES, idx, (d, w) -> {
+                ThemeManager.set(this, ThemeManager.KEYS[w]);
+                d.dismiss();
+                recreate();
+            })
+            .setNegativeButton("Отмена", null)
+            .show();
     }
 
     @Override
