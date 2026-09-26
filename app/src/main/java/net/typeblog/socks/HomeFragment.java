@@ -64,7 +64,7 @@ public class HomeFragment extends Fragment implements ServerAdapter.Listener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle s) {
         View v = inflater.inflate(R.layout.fragment_home, container, false);
-        mManager = new ProfileManager(requireContext().getApplicationContext());
+        mManager = new ProfileManager(getActivity().getApplicationContext());
 
         mConnectBtn = v.findViewById(R.id.connect_button);
         mConnectIcon = v.findViewById(R.id.connect_icon);
@@ -89,7 +89,7 @@ public class HomeFragment extends Fragment implements ServerAdapter.Listener {
         super.onDestroyView();
         mHandler.removeCallbacks(mStateTick);
         if (mBinder != null) {
-            try { requireContext().unbindService(mConn); } catch (Exception ignored) {}
+            try { getActivity().unbindService(mConn); } catch (Exception ignored) {}
             mBinder = null;
         }
     }
@@ -174,8 +174,8 @@ public class HomeFragment extends Fragment implements ServerAdapter.Listener {
 
     private void checkState() {
         if (mBinder == null) {
-            requireContext().bindService(
-                new Intent(requireContext(), SocksVpnService.class), mConn, 0);
+            getActivity().bindService(
+                new Intent(getActivity(), SocksVpnService.class), mConn, 0);
         }
     }
 
@@ -211,7 +211,7 @@ public class HomeFragment extends Fragment implements ServerAdapter.Listener {
         mStopping = true;
         try { mBinder.stop(); } catch (Exception ignored) {}
         mBinder = null;
-        try { requireContext().unbindService(mConn); } catch (Exception ignored) {}
+        try { getActivity().unbindService(mConn); } catch (Exception ignored) {}
         checkState();
     }
 

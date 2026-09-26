@@ -345,7 +345,7 @@ public class ProfileFragment extends PreferenceFragment implements Preference.On
         }
 
         if (getActivity() instanceof MainActivity) {
-            ((MainActivity) getActivity()).updatePowerIcon(mRunning);
+            ((MainActivity) getActivity()).setPowerColor(mRunning);
         }
 
         if (mStarting && mRunning) mStarting = false;
