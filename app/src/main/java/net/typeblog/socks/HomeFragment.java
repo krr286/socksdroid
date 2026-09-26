@@ -298,7 +298,13 @@ public class HomeFragment extends Fragment implements ServerAdapter.Listener {
 
         if (mStatus != null) {
             mStatus.setText(mRunning ? "ПОДКЛЮЧЕНО" : "НЕ ЗАЩИЩЕНО");
-            mStatus.setTextColor(mRunning ? 0xFF7A3FF7 : 0xFF888888);
+            android.util.TypedValue tv = new android.util.TypedValue();
+            getActivity().getTheme().resolveAttribute(android.R.attr.colorAccent, tv, true);
+            int accent = tv.data;
+            if (!mRunning) {
+                getActivity().getTheme().resolveAttribute(android.R.attr.textColorSecondary, tv, true);
+            }
+            mStatus.setTextColor(accent);
         }
 
         if (mConnectBtn != null) {

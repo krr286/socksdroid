@@ -10,13 +10,14 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="?android:colorBackground">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:background="#0F1420"
+            android:background="?attr/colorPrimary"
             app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Dark" />
 
@@ -33,13 +34,12 @@
         android:layout_width="290dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="#14161C"
+        android:background="?android:colorBackground"
         android:orientation="vertical">
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="180dp"
-            android:background="#1E2230">
+            android:layout_height="180dp">
 
             <ImageView
                 android:id="@+id/drawer_bg"
@@ -48,18 +48,19 @@
                 android:src="@drawable/drawer_bg_placeholder"
                 android:scaleType="centerCrop"
                 android:alpha="0.55" />
+
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:src="@drawable/drawer_pattern"
-                android:scaleType="centerCrop" />
-
+                android:scaleType="centerCrop"
+                android:alpha="0.6" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="THEK"
-                android:textColor="#FFFFFF"
+                android:textColor="?android:textColorPrimary"
                 android:textSize="34sp"
                 android:textStyle="bold|italic"
                 android:letterSpacing="0.25"
@@ -75,7 +76,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="VPN &amp; PROXY"
-                android:textColor="#AAFFFFFF"
+                android:textColor="?android:textColorSecondary"
                 android:textSize="11sp"
                 android:letterSpacing="0.3"
                 android:layout_gravity="bottom|start"
@@ -91,8 +92,8 @@
             android:gravity="center_vertical"
             android:paddingStart="24dp"
             android:background="?android:attr/selectableItemBackground">
-            <ImageView android:layout_width="22dp" android:layout_height="22dp" android:src="@drawable/ic_nav_home" android:tint="#7A3FF7" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="18dp" android:text="Главная" android:textColor="#FFFFFF" android:textSize="15sp" />
+            <ImageView android:layout_width="22dp" android:layout_height="22dp" android:src="@drawable/ic_nav_home" android:tint="?attr/colorAccent" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="18dp" android:text="Главная" android:textColor="?android:textColorPrimary" android:textSize="15sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -103,8 +104,8 @@
             android:gravity="center_vertical"
             android:paddingStart="24dp"
             android:background="?android:attr/selectableItemBackground">
-            <ImageView android:layout_width="22dp" android:layout_height="22dp" android:src="@drawable/ic_nav_servers" android:tint="#7A3FF7" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="18dp" android:text="Сервера" android:textColor="#FFFFFF" android:textSize="15sp" />
+            <ImageView android:layout_width="22dp" android:layout_height="22dp" android:src="@drawable/ic_nav_servers" android:tint="?attr/colorAccent" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="18dp" android:text="Сервера" android:textColor="?android:textColorPrimary" android:textSize="15sp" />
         </LinearLayout>
 
         <View
@@ -114,7 +115,8 @@
             android:layout_marginBottom="8dp"
             android:layout_marginStart="24dp"
             android:layout_marginEnd="24dp"
-            android:background="#33FFFFFF" />
+            android:background="?android:textColorSecondary"
+            android:alpha="0.3" />
 
         <LinearLayout
             android:id="@+id/nav_theme"
@@ -124,8 +126,8 @@
             android:gravity="center_vertical"
             android:paddingStart="24dp"
             android:background="?android:attr/selectableItemBackground">
-            <ImageView android:layout_width="22dp" android:layout_height="22dp" android:src="@drawable/ic_nav_settings" android:tint="#7A3FF7" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="18dp" android:text="Тема" android:textColor="#FFFFFF" android:textSize="15sp" />
+            <ImageView android:layout_width="22dp" android:layout_height="22dp" android:src="@drawable/ic_nav_settings" android:tint="?attr/colorAccent" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="18dp" android:text="Тема" android:textColor="?android:textColorPrimary" android:textSize="15sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -136,8 +138,8 @@
             android:gravity="center_vertical"
             android:paddingStart="24dp"
             android:background="?android:attr/selectableItemBackground">
-            <ImageView android:layout_width="22dp" android:layout_height="22dp" android:src="@drawable/ic_nav_settings" android:tint="#7A3FF7" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="18dp" android:text="Настройки" android:textColor="#FFFFFF" android:textSize="15sp" />
+            <ImageView android:layout_width="22dp" android:layout_height="22dp" android:src="@drawable/ic_nav_settings" android:tint="?attr/colorAccent" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="18dp" android:text="Настройки" android:textColor="?android:textColorPrimary" android:textSize="15sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -148,10 +150,9 @@
             android:gravity="center_vertical"
             android:paddingStart="24dp"
             android:background="?android:attr/selectableItemBackground">
-            <ImageView android:layout_width="22dp" android:layout_height="22dp" android:src="@drawable/ic_nav_info" android:tint="#7A3FF7" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="18dp" android:text="О приложении" android:textColor="#FFFFFF" android:textSize="15sp" />
+            <ImageView android:layout_width="22dp" android:layout_height="22dp" android:src="@drawable/ic_nav_info" android:tint="?attr/colorAccent" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="18dp" android:text="О приложении" android:textColor="?android:textColorPrimary" android:textSize="15sp" />
         </LinearLayout>
-
 
         <View android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" />
 
@@ -159,11 +160,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="THEK VPN"
-            android:textColor="#44FFFFFF"
+            android:textColor="?android:textColorSecondary"
             android:textSize="11sp"
             android:gravity="center"
             android:paddingBottom="16dp"
-            android:letterSpacing="0.4" />
+            android:letterSpacing="0.4"
+            android:alpha="0.4" />
     </LinearLayout>
 
 </androidx.drawerlayout.widget.DrawerLayout>

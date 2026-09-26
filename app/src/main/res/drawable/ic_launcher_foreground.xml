@@ -4,13 +4,20 @@
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
-    <!-- Буква T по центру (safe zone 66x66) -->
+
+    <!-- Верхняя перекладина Т -->
     <path
         android:fillColor="#FFFFFF"
-        android:pathData="M32,34 L76,34 L76,44 L60,44 L60,76 L48,76 L48,44 L32,44 Z" />
-    <!-- Тонкая нижняя черта -->
+        android:pathData="M28,32 L80,32 L80,44 L28,44 Z" />
+
+    <!-- Ножка Т с лёгким закосом вправо -->
     <path
         android:fillColor="#FFFFFF"
-        android:fillAlpha="0.6"
-        android:pathData="M44,80 L64,80 L64,82 L44,82 Z" />
+        android:pathData="M48,44 L60,44 L62,80 L46,80 Z" />
+
+    <!-- Акцентная точка справа внизу -->
+    <path
+        android:fillColor="#B388FF"
+        android:pathData="M72,72 m-4,0 a4,4 0 1,0 8,0 a4,4 0 1,0 -8,0" />
+
 </vector>

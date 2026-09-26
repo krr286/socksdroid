@@ -7,50 +7,80 @@
     </style>
 
     <style name="AppTheme.Dark" parent="AppTheme">
-        <item name="colorPrimary">@color/dark_primary</item>
-        <item name="colorPrimaryDark">@color/dark_background</item>
-        <item name="colorAccent">@color/dark_primary</item>
-        <item name="android:windowBackground">@color/dark_background</item>
-        <item name="android:textColorPrimary">@color/dark_text_primary</item>
+        <item name="colorPrimary">#7A3FF7</item>
+        <item name="colorPrimaryDark">#0B0D12</item>
+        <item name="colorAccent">#7A3FF7</item>
+        <item name="android:colorAccent">#7A3FF7</item>
+        <item name="android:colorBackground">#0B0D12</item>
+        <item name="android:windowBackground">#0B0D12</item>
+        <item name="android:textColorPrimary">#FFFFFF</item>
+        <item name="android:textColorSecondary">#99FFFFFF</item>
+        <item name="android:statusBarColor">#0B0D12</item>
+        <item name="android:navigationBarColor">#0B0D12</item>
     </style>
 
     <style name="AppTheme.Light" parent="AppTheme">
-        <item name="colorPrimary">@color/light_primary</item>
-        <item name="colorPrimaryDark">@color/light_primary_dark</item>
-        <item name="colorAccent">@color/light_primary</item>
-        <item name="android:windowBackground">@color/light_background</item>
-        <item name="android:textColorPrimary">@color/light_text_primary</item>
+        <item name="colorPrimary">#6200EE</item>
+        <item name="colorPrimaryDark">#3700B3</item>
+        <item name="colorAccent">#6200EE</item>
+        <item name="android:colorAccent">#6200EE</item>
+        <item name="android:colorBackground">#F5F5F7</item>
+        <item name="android:windowBackground">#F5F5F7</item>
+        <item name="android:textColorPrimary">#111111</item>
+        <item name="android:textColorSecondary">#66000000</item>
+        <item name="android:statusBarColor">#F5F5F7</item>
+        <item name="android:navigationBarColor">#FFFFFF</item>
     </style>
 
     <style name="AppTheme.Purple" parent="AppTheme">
-        <item name="colorPrimary">@color/purple_primary</item>
-        <item name="colorPrimaryDark">@color/purple_primary_dark</item>
-        <item name="colorAccent">@color/purple_primary</item>
-        <item name="android:windowBackground">@color/purple_background</item>
-        <item name="android:textColorPrimary">@color/purple_text_primary</item>
+        <item name="colorPrimary">#A26BFF</item>
+        <item name="colorPrimaryDark">#1A0F2E</item>
+        <item name="colorAccent">#A26BFF</item>
+        <item name="android:colorAccent">#A26BFF</item>
+        <item name="android:colorBackground">#1A0F2E</item>
+        <item name="android:windowBackground">#1A0F2E</item>
+        <item name="android:textColorPrimary">#FFFFFF</item>
+        <item name="android:textColorSecondary">#AAFFFFFF</item>
+        <item name="android:statusBarColor">#1A0F2E</item>
+        <item name="android:navigationBarColor">#1A0F2E</item>
     </style>
 
     <style name="AppTheme.Pink" parent="AppTheme">
-        <item name="colorPrimary">@color/pink_primary</item>
-        <item name="colorPrimaryDark">@color/pink_primary_dark</item>
-        <item name="colorAccent">@color/pink_primary</item>
-        <item name="android:windowBackground">@color/pink_background</item>
-        <item name="android:textColorPrimary">@color/pink_text_primary</item>
+        <item name="colorPrimary">#FF3F87</item>
+        <item name="colorPrimaryDark">#2A0F1A</item>
+        <item name="colorAccent">#FF3F87</item>
+        <item name="android:colorAccent">#FF3F87</item>
+        <item name="android:colorBackground">#2A0F1A</item>
+        <item name="android:windowBackground">#2A0F1A</item>
+        <item name="android:textColorPrimary">#FFFFFF</item>
+        <item name="android:textColorSecondary">#AAFFFFFF</item>
+        <item name="android:statusBarColor">#2A0F1A</item>
+        <item name="android:navigationBarColor">#2A0F1A</item>
     </style>
 
     <style name="AppTheme.Turquoise" parent="AppTheme">
-        <item name="colorPrimary">@color/turquoise_primary</item>
-        <item name="colorPrimaryDark">@color/turquoise_primary_dark</item>
-        <item name="colorAccent">@color/turquoise_primary</item>
-        <item name="android:windowBackground">@color/turquoise_background</item>
-        <item name="android:textColorPrimary">@color/turquoise_text_primary</item>
+        <item name="colorPrimary">#3FFFD1</item>
+        <item name="colorPrimaryDark">#0F2A2A</item>
+        <item name="colorAccent">#3FFFD1</item>
+        <item name="android:colorAccent">#3FFFD1</item>
+        <item name="android:colorBackground">#0F2A2A</item>
+        <item name="android:windowBackground">#0F2A2A</item>
+        <item name="android:textColorPrimary">#FFFFFF</item>
+        <item name="android:textColorSecondary">#AAFFFFFF</item>
+        <item name="android:statusBarColor">#0F2A2A</item>
+        <item name="android:navigationBarColor">#0F2A2A</item>
     </style>
 
     <style name="AppTheme.Orange" parent="AppTheme">
-        <item name="colorPrimary">@color/orange_primary</item>
-        <item name="colorPrimaryDark">@color/orange_primary_dark</item>
-        <item name="colorAccent">@color/orange_primary</item>
-        <item name="android:windowBackground">@color/orange_background</item>
-        <item name="android:textColorPrimary">@color/orange_text_primary</item>
+        <item name="colorPrimary">#FF8C3F</item>
+        <item name="colorPrimaryDark">#2A1A0F</item>
+        <item name="colorAccent">#FF8C3F</item>
+        <item name="android:colorAccent">#FF8C3F</item>
+        <item name="android:colorBackground">#2A1A0F</item>
+        <item name="android:windowBackground">#2A1A0F</item>
+        <item name="android:textColorPrimary">#FFFFFF</item>
+        <item name="android:textColorSecondary">#AAFFFFFF</item>
+        <item name="android:statusBarColor">#2A1A0F</item>
+        <item name="android:navigationBarColor">#2A1A0F</item>
     </style>
 </resources>
