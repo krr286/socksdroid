@@ -268,7 +268,7 @@ public class HomeFragment extends Fragment implements ServerAdapter.Listener {
     private void createProfile(String name, String srv, String port, String user, String pass) {
         Profile pr = mManager.addProfile(name);
         if (pr == null) {
-            pr = mManager.addProfile(name + "_" + System.currentTimeMillis());
+            pr = mManager.addProfile(name + "_" + java.lang.System.currentTimeMillis());
             if (pr == null) return;
         }
         pr.setServer(srv);
