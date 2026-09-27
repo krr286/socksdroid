@@ -48,6 +48,33 @@ public class MainActivity extends AppCompatActivity {
 
         mToolbar.setNavigationOnClickListener(v -> mDrawer.openDrawer(GravityCompat.START));
 
+
+        // Показать предыдущий краш, если был
+        try {
+            java.io.File dir = getExternalFilesDir(null);
+            if (dir != null) {
+                java.io.File[] files = dir.listFiles((d, n) -> n.startsWith("crash_") && n.endsWith(".txt"));
+                if (files != null && files.length > 0) {
+                    StringBuilder sb = new StringBuilder();
+                    for (java.io.File f : files) {
+                        sb.append("=== ").append(f.getName()).append(" ===\n");
+                        java.io.BufferedReader br = new java.io.BufferedReader(new java.io.FileReader(f));
+                        String line;
+                        while ((line = br.readLine()) != null) sb.append(line).append("\n");
+                        br.close();
+                        sb.append("\n");
+                        f.delete();
+                    }
+                    new android.app.AlertDialog.Builder(this)
+                        .setTitle("Краш-лог (пришли разработчику)")
+                        .setMessage(sb.toString())
+                        .setPositiveButton("OK", null)
+                        .setCancelable(false)
+                        .show();
+                }
+            }
+        } catch (Exception ignored) {}
+
         setNav(R.id.nav_home);
         setNav(R.id.nav_servers);
         setNav(R.id.nav_theme);
