@@ -109,7 +109,11 @@ public class SocksVpnService extends VpnService {
                 .setSmallIcon(R.drawable.ic_vpn)
                 .setContentIntent(contentIntent)
                 .build();
-        startForeground(NOTIFICATION_ID, notif);
+        if (android.os.Build.VERSION.SDK_INT >= 34) {
+            startForeground(NOTIFICATION_ID, notif, android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_SYSTEM_EXEMPTED);
+        } else {
+            startForeground(NOTIFICATION_ID, notif);
+        };
 
         // Create an fd.
         configure(name, route, perApp, appBypass, appList, ipv6);
