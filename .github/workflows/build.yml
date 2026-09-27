@@ -24,13 +24,13 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Build Debug APK
+      - name: Build Release APK
         run: ./gradlew assembleRelease
 
       - name: Rename APK
         run: |
           mkdir -p /tmp/out
-          cp app/build/outputs/apk/debug/*.apk /tmp/out/thek-socksdroid-debug.apk
+          cp app/build/outputs/apk/release/*.apk /tmp/out/thek-socksdroid-release.apk
           ls -la /tmp/out/
 
       - name: Create Release
@@ -38,12 +38,12 @@ jobs:
         with:
           tag_name: v1.0.${{ github.run_number }}
           name: THEK v1.0.${{ github.run_number }}
-          files: /tmp/out/thek-socksdroid-debug.apk
+          files: /tmp/out/thek-socksdroid-release.apk
           draft: false
           prerelease: false
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: thek-socksdroid-debug
-          path: app/build/outputs/apk/debug/*.apk
+          name: thek-socksdroid-release
+          path: app/build/outputs/apk/release/*.apk
