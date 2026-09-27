@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- Тень снизу -->
-    <item android:top="8dp" android:left="2dp" android:right="2dp" android:bottom="0dp">
-        <shape android:shape="oval">
-            <solid android:color="#22000000" />
-        </shape>
-    </item>
-    <!-- Внешний круг (заливка) -->
-    <item android:top="0dp" android:bottom="8dp">
+    <!-- Внешнее кольцо -->
+    <item>
         <shape android:shape="oval">
             <gradient
-                android:type="linear"
                 android:startColor="#7A3FF7"
-                android:endColor="#5A2FD8"
-                android:angle="270" />
+                android:endColor="#3A1A9E"
+                android:angle="135"
+                android:type="radial"
+                android:gradientRadius="180" />
+            <stroke android:width="2dp" android:color="#9A6FFF" />
         </shape>
     </item>
-    <!-- Внутренний блик (сверху) -->
-    <item android:left="14dp" android:right="14dp" android:top="6dp" android:bottom="70dp">
+    <!-- Внутренний тёмный круг -->
+    <item android:left="16dp" android:right="16dp" android:top="16dp" android:bottom="16dp">
         <shape android:shape="oval">
-            <solid android:color="#33FFFFFF" />
+            <gradient
+                android:startColor="#3A1A9E"
+                android:endColor="#1A0F2E"
+                android:angle="135" />
+            <stroke android:width="2dp" android:color="#7A3FF7" />
         </shape>
     </item>
 </layer-list>

@@ -23,6 +23,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Логгер крашей
+        final Thread.UncaughtExceptionHandler defaultHandler = Thread.getDefaultUncaughtExceptionHandler();
+        Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
+            try {
+                java.io.File f = new java.io.File(getExternalFilesDir(null), "crash.txt");
+                java.io.PrintWriter pw = new java.io.PrintWriter(f);
+                pw.println("Time: " + new java.util.Date());
+                pw.println("Thread: " + t.getName());
+                e.printStackTrace(pw);
+                pw.close();
+            } catch (Exception ignored) {}
+            if (defaultHandler != null) defaultHandler.uncaughtException(t, e);
+        });
+
         mDrawer = findViewById(R.id.drawer_layout);
         mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
