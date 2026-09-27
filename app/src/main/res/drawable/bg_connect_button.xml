@@ -1,14 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item>
+    <!-- Тень снизу -->
+    <item android:top="8dp" android:left="2dp" android:right="2dp" android:bottom="0dp">
         <shape android:shape="oval">
-            <solid android:color="?attr/colorAccent" />
-            <stroke android:width="3dp" android:color="#33FFFFFF" />
+            <solid android:color="#22000000" />
         </shape>
     </item>
-    <item android:left="14dp" android:right="14dp" android:top="14dp" android:bottom="14dp">
+    <!-- Внешний круг (заливка) -->
+    <item android:top="0dp" android:bottom="8dp">
         <shape android:shape="oval">
-            <solid android:color="?android:colorBackground" />
+            <gradient
+                android:type="linear"
+                android:startColor="#7A3FF7"
+                android:endColor="#5A2FD8"
+                android:angle="270" />
+        </shape>
+    </item>
+    <!-- Внутренний блик (сверху) -->
+    <item android:left="14dp" android:right="14dp" android:top="6dp" android:bottom="70dp">
+        <shape android:shape="oval">
+            <solid android:color="#33FFFFFF" />
         </shape>
     </item>
 </layer-list>

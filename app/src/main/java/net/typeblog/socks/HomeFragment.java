@@ -213,7 +213,6 @@ public class HomeFragment extends Fragment implements ServerAdapter.Listener {
         if (content == null) return;
         String data = content.trim();
 
-        // Попытка base64-декодирования
         if (!data.contains("://") && data.length() > 20) {
             try {
                 byte[] dec = android.util.Base64.decode(data, android.util.Base64.DEFAULT);
@@ -225,41 +224,33 @@ public class HomeFragment extends Fragment implements ServerAdapter.Listener {
         int added = 0;
         String[] lines = data.split("\r?\n");
         int n = 1;
+        java.util.regex.Pattern pat = java.util.regex.Pattern.compile(
+            "^socks5?://(?:([^:@/]+):([^@/]+)@)?([^:#/]+):(\d+)(?:#(.+))?$"
+        );
         for (String raw : lines) {
             String line = raw.trim();
-            if (line.isEmpty()) continue;
-            if (line.startsWith("#") || line.startsWith("//")) continue;
+            if (line.isEmpty() || line.startsWith("#") || line.startsWith("//")) continue;
 
+            java.util.regex.Matcher m = pat.matcher(line);
+            if (!m.matches()) continue;
+
+            String user = m.group(1);
+            String pass = m.group(2);
+            String host = m.group(3);
+            String port = m.group(4);
+            String frag = m.group(5);
             String name = "Сервер " + n;
-            String srv = null, port = null, user = null, pass = null;
-
-            try {
-                if (line.startsWith("socks5://") || line.startsWith("socks://")) {
-                    java.net.URI uri = java.net.URI.create(line.replace("socks://", "socks5://"));
-                    srv = uri.getHost();
-                    port = String.valueOf(uri.getPort());
-                    String ui = uri.getUserInfo();
-                    if (ui != null && ui.contains(":")) {
-                        user = ui.split(":")[0];
-                        pass = ui.split(":")[1];
-                    }
-                    if (uri.getFragment() != null) name = uri.getFragment();
-                } else if (line.contains(":") && !line.contains(" ")) {
-                    // host:port
-                    String[] parts = line.split(":");
-                    if (parts.length == 2) { srv = parts[0]; port = parts[1]; }
-                }
-            } catch (Exception ignored) { continue; }
-
-            if (srv != null && port != null) {
-                createProfile(name, srv, port, user, pass);
-                added++;
-                n++;
+            if (frag != null) {
+                try { name = java.net.URLDecoder.decode(frag, "UTF-8"); }
+                catch (Exception e) { name = frag; }
             }
+            createProfile(name, host, port, user, pass);
+            added++;
+            n++;
         }
 
         if (added == 0) {
-            Toast.makeText(getActivity(), "Не нашли SOCKS5 в ссылке. Нужен VLESS? Скажи — переделаем.", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "Не нашли SOCKS5 в ссылке", Toast.LENGTH_LONG).show();
         } else {
             Toast.makeText(getActivity(), "Добавлено: " + added, Toast.LENGTH_SHORT).show();
         }
