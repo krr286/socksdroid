@@ -275,21 +275,8 @@ public class HomeFragment extends Fragment implements ServerAdapter.Listener {
         pr.setIsUserpw(!TextUtils.isEmpty(user));
         pr.setUsername(user == null ? "" : user);
         pr.setPassword(pass == null ? "" : pass);
-
-        // ЯВНЫЕ ДЕФОЛТЫ — чтобы сервис не падал на null
-        pr.setRoute("all");
-        pr.setDns("8.8.8.8");
-        pr.setDnsPort(53);
-        pr.setIsPerApp(false);
-        pr.setIsBypassApp(false);
-        pr.setAppList("");
-        pr.setHasIPv6(false);
-        pr.setHasUDP(false);
-        pr.setUDPGW("");
-        pr.setAutoConnect(false);
-
         mProfile = pr;
-        try { mManager.switchDefault(pr.getName()); } catch (Exception ignored) {}
+        mManager.switchDefault(name);
         loadProfiles();
     }
 
@@ -327,19 +314,26 @@ public class HomeFragment extends Fragment implements ServerAdapter.Listener {
         if (mBinder == null) mRunning = false;
         else try { mRunning = mBinder.isRunning(); } catch (Exception e) { mRunning = false; }
 
-        if (mStatus == null || getActivity() == null) return;
-
-        mStatus.setText(mRunning ? "ПОДКЛЮЧЕНО" : "НЕ ЗАЩИЩЕНО");
-        try {
+        if (mStatus != null) {
+            mStatus.setText(mRunning ? "ПОДКЛЮЧЕНО" : "НЕ ЗАЩИЩЕНО");
             android.util.TypedValue tv = new android.util.TypedValue();
             getActivity().getTheme().resolveAttribute(android.R.attr.colorAccent, tv, true);
-            mStatus.setTextColor(tv.data);
-        } catch (Exception ignored) {}
+            int accent = tv.data;
+            if (!mRunning) {
+                getActivity().getTheme().resolveAttribute(android.R.attr.textColorSecondary, tv, true);
+            }
+            mStatus.setTextColor(accent);
+        }
 
         if (mConnectBtn != null) {
-            if (mRunning) mConnectBtn.setBackgroundResource(R.drawable.bg_connect_button_on);
-            else mConnectBtn.setBackgroundResource(R.drawable.bg_connect_button);
+            if (mRunning) {
+                mConnectBtn.setBackgroundResource(R.drawable.bg_connect_button_on);
+            } else {
+                mConnectBtn.setBackgroundResource(R.drawable.bg_connect_button);
+            }
         }
+
+        applyButtonTheme(mRunning);
 
         if (mStarting && mRunning) mStarting = false;
         if (mStopping && !mRunning) mStopping = false;
@@ -351,14 +345,9 @@ public class HomeFragment extends Fragment implements ServerAdapter.Listener {
             return;
         }
         mStarting = true;
-        try {
-            Intent i = VpnService.prepare(getActivity());
-            if (i != null) startActivityForResult(i, 0);
-            else onActivityResult(0, Activity.RESULT_OK, null);
-        } catch (Exception e) {
-            mStarting = false;
-            Toast.makeText(getActivity(), "VPN ошибка: " + e.getClass().getSimpleName() + ": " + e.getMessage(), Toast.LENGTH_LONG).show();
-        }
+        Intent i = VpnService.prepare(getActivity());
+        if (i != null) startActivityForResult(i, 0);
+        else onActivityResult(0, Activity.RESULT_OK, null);
     }
 
     private void stopVpn() {
@@ -373,16 +362,9 @@ public class HomeFragment extends Fragment implements ServerAdapter.Listener {
     @Override
     public void onActivityResult(int req, int res, Intent data) {
         super.onActivityResult(req, res, data);
-        try {
-            if (res == Activity.RESULT_OK && mProfile != null) {
-                Utility.startVpn(getActivity(), mProfile);
-                checkState();
-            } else {
-                mStarting = false;
-            }
-        } catch (Exception e) {
-            mStarting = false;
-            Toast.makeText(getActivity(), "Запуск: " + e.getClass().getSimpleName() + ": " + e.getMessage(), Toast.LENGTH_LONG).show();
-        }
+        if (res == Activity.RESULT_OK && mProfile != null) {
+            Utility.startVpn(getActivity(), mProfile);
+            checkState();
+        } else mStarting = false;
     }
 }
