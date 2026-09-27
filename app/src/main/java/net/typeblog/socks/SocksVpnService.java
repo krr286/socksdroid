@@ -5,7 +5,6 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
-import android.content.pm.ServiceInfo;
 import android.net.VpnService;
 import android.os.Build;
 import android.os.IBinder;
@@ -110,13 +109,7 @@ public class SocksVpnService extends VpnService {
                 .setSmallIcon(R.drawable.ic_vpn)
                 .setContentIntent(contentIntent)
                 .build();
-        if (Build.VERSION.SDK_INT >= 34) {
-            startForeground(NOTIFICATION_ID, notif, ServiceInfo.FOREGROUND_SERVICE_TYPE_SYSTEM_EXEMPTED);
-        } else if (Build.VERSION.SDK_INT >= 29) {
-            startForeground(NOTIFICATION_ID, notif, ServiceInfo.FOREGROUND_SERVICE_TYPE_MANIFEST);
-        } else {
-            startForeground(NOTIFICATION_ID, notif);
-        }
+        startForeground(NOTIFICATION_ID, notif);
 
         // Create an fd.
         configure(name, route, perApp, appBypass, appList, ipv6);
