@@ -79,6 +79,7 @@ public class HomeFragment extends Fragment implements ServerAdapter.Listener {
         mConnectBtn.setOnClickListener(x -> toggleConnect());
 
         loadProfiles();
+        applyButtonTheme(false);
         checkState();
         mHandler.postDelayed(mStateTick, 300);
         return v;
@@ -182,7 +183,16 @@ public class HomeFragment extends Fragment implements ServerAdapter.Listener {
             .show();
     }
 
-    private void fetchUrl(final String url) {
+    private void fetchUrl(final String input) {
+        final String url = input.trim();
+        // Если это уже прямая socks5-ссылка — не качаем по HTTP
+        if (url.startsWith("socks5://") || url.startsWith("socks://")
+            || url.contains("
+socks5://") || url.contains("
+socks://")) {
+            parseAndAdd(url);
+            return;
+        }
         Toast.makeText(getActivity(), "Загрузка...", Toast.LENGTH_SHORT).show();
         new Thread(() -> {
             String body = null;
@@ -196,7 +206,8 @@ public class HomeFragment extends Fragment implements ServerAdapter.Listener {
                     new java.io.InputStreamReader(c.getInputStream()));
                 StringBuilder sb = new StringBuilder();
                 String line;
-                while ((line = br.readLine()) != null) sb.append(line).append("\n");
+                while ((line = br.readLine()) != null) sb.append(line).append("
+");
                 br.close();
                 body = sb.toString();
             } catch (Exception ex) {
@@ -283,6 +294,25 @@ public class HomeFragment extends Fragment implements ServerAdapter.Listener {
         }
     }
 
+    private void applyButtonTheme(boolean connected) {
+        if (mConnectBtn == null) return;
+        android.util.TypedValue tv = new android.util.TypedValue();
+        getActivity().getTheme().resolveAttribute(android.R.attr.colorAccent, tv, true);
+        int accent = tv.data;
+
+        android.graphics.drawable.GradientDrawable gd = new android.graphics.drawable.GradientDrawable();
+        gd.setShape(android.graphics.drawable.GradientDrawable.OVAL);
+        if (connected) {
+            gd.setColor(accent);
+            gd.setStroke(8, accent);
+        } else {
+            int dim = (accent & 0x00FFFFFF) | 0x99000000;
+            gd.setColor(dim);
+            gd.setStroke(3, accent);
+        }
+        mConnectBtn.setBackground(gd);
+    }
+
     private void updateState() {
         if (mBinder == null) mRunning = false;
         else try { mRunning = mBinder.isRunning(); } catch (Exception e) { mRunning = false; }
@@ -305,6 +335,8 @@ public class HomeFragment extends Fragment implements ServerAdapter.Listener {
                 mConnectBtn.setBackgroundResource(R.drawable.bg_connect_button);
             }
         }
+
+        applyButtonTheme(mRunning);
 
         if (mStarting && mRunning) mStarting = false;
         if (mStopping && !mRunning) mStopping = false;
