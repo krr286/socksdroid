@@ -22,19 +22,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:paddingTop="12dp">
-
-        <TextView
-            android:id="@+id/home_status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="НЕ ЗАЩИЩЕНО"
-            android:textColor="?attr/colorAccent"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:letterSpacing="0.1" />
-
-        <FrameLayout
+<FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1">
@@ -58,11 +46,23 @@
             </FrameLayout>
 
             <TextView
+                android:id="@+id/home_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center_horizontal"
+                android:layout_marginBottom="50dp"
+                android:text="НЕ ЗАЩИЩЕНО"
+                android:textColor="#FF3F3F"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.1" />
+
+            <TextView
                 android:id="@+id/current_server"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|center_horizontal"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="20dp"
                 android:text=""
                 android:textColor="?android:textColorSecondary"
                 android:textSize="12sp" />
