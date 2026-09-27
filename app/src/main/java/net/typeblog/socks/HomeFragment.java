@@ -66,6 +66,12 @@ public class HomeFragment extends Fragment implements ServerAdapter.Listener {
         View v = inflater.inflate(R.layout.fragment_home, container, false);
         mManager = new ProfileManager(getActivity().getApplicationContext());
 
+        android.widget.ImageView homeBg = v.findViewById(R.id.home_bg);
+        if (homeBg != null) {
+            android.graphics.Bitmap bm = RemoteAssets.getBitmap(getActivity(), "home");
+            if (bm != null) { homeBg.setImageBitmap(bm); homeBg.setAlpha(0.55f); }
+        }
+
         mConnectBtn = v.findViewById(R.id.connect_button);
         mConnectIcon = v.findViewById(R.id.connect_icon);
         mStatus = v.findViewById(R.id.home_status);

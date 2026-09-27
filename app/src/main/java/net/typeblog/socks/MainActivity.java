@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
         ThemeManager.apply(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        RemoteAssets.sync(this);
 
         mDrawer = findViewById(R.id.drawer_layout);
         mToolbar = findViewById(R.id.toolbar);
@@ -39,6 +40,22 @@ public class MainActivity extends AppCompatActivity {
         setNav(R.id.nav_theme);
         setNav(R.id.nav_settings);
         setNav(R.id.nav_about);
+
+        // Welcome
+        String welcome = RemoteAssets.getText(this, "text_welcome", "");
+        if (!welcome.isEmpty()) {
+            new androidx.appcompat.app.AlertDialog.Builder(this)
+                .setMessage(welcome)
+                .setPositiveButton("OK", null)
+                .show();
+        }
+
+        // Drawer фон + логотип из remote
+        android.widget.ImageView drawerBg = findViewById(R.id.drawer_bg);
+        if (drawerBg != null) {
+            android.graphics.Bitmap bm = RemoteAssets.getBitmap(this, "panel");
+            if (bm != null) { drawerBg.setImageBitmap(bm); drawerBg.setAlpha(0.6f); }
+        }
 
         if (savedInstanceState == null) {
             selectItem(R.id.nav_home);

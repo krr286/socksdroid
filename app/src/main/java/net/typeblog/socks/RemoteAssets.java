@@ -1,0 +1,97 @@
+package net.typeblog.socks;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Log;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+public class RemoteAssets {
+    private static final String TAG = "RemoteAssets";
+    private static final String BASE = "http://77.239.101.146:8080";
+    private static final String PREFS = "thek_assets";
+    private static final String KEY_VERSION = "version";
+
+    public static File cacheDir(Context ctx) {
+        File d = new File(ctx.getFilesDir(), "thek_assets");
+        if (!d.exists()) d.mkdirs();
+        return d;
+    }
+
+    public static void sync(Context ctx) {
+        final Context app = ctx.getApplicationContext();
+        new Thread(() -> {
+            try {
+                String cfg = httpGet(BASE + "/app/config");
+                if (cfg == null) return;
+                org.json.JSONObject j = new org.json.JSONObject(cfg);
+                int newVer = j.optInt("version", 1);
+                SharedPreferences sp = app.getSharedPreferences(PREFS, 0);
+                int oldVer = sp.getInt(KEY_VERSION, 0);
+
+                // тексты — всегда обновляем
+                sp.edit()
+                  .putString("text_about",   j.optString("text_about", ""))
+                  .putString("text_welcome", j.optString("text_welcome", ""))
+                  .putString("notification", j.optString("notification", ""))
+                  .apply();
+
+                if (newVer <= oldVer) return;
+
+                File dir = cacheDir(app);
+                for (String n : new String[]{"panel", "home", "common", "logo"}) {
+                    byte[] bytes = httpGetBytes(BASE + "/assets/" + n + ".png");
+                    if (bytes != null && bytes.length > 0) {
+                        FileOutputStream fos = new FileOutputStream(new File(dir, n + ".png"));
+                        fos.write(bytes);
+                        fos.close();
+                        Log.d(TAG, "saved " + n + ".png (" + bytes.length + " bytes)");
+                    }
+                }
+                sp.edit().putInt(KEY_VERSION, newVer).apply();
+            } catch (Exception e) {
+                Log.e(TAG, "sync: " + e.getMessage());
+            }
+        }).start();
+    }
+
+    public static Bitmap getBitmap(Context ctx, String name) {
+        File f = new File(cacheDir(ctx), name + ".png");
+        if (!f.exists()) return null;
+        return BitmapFactory.decodeFile(f.getAbsolutePath());
+    }
+
+    public static String getText(Context ctx, String key, String def) {
+        String v = ctx.getSharedPreferences(PREFS, 0).getString(key, null);
+        return (v == null || v.isEmpty()) ? def : v;
+    }
+
+    private static String httpGet(String url) {
+        byte[] b = httpGetBytes(url);
+        return b == null ? null : new String(b);
+    }
+
+    private static byte[] httpGetBytes(String url) {
+        try {
+            HttpURLConnection c = (HttpURLConnection) new URL(url).openConnection();
+            c.setConnectTimeout(10000);
+            c.setReadTimeout(20000);
+            if (c.getResponseCode() != 200) return null;
+            InputStream in = c.getInputStream();
+            java.io.ByteArrayOutputStream bos = new java.io.ByteArrayOutputStream();
+            byte[] buf = new byte[8192];
+            int r;
+            while ((r = in.read(buf)) > 0) bos.write(buf, 0, r);
+            in.close();
+            return bos.toByteArray();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+}
