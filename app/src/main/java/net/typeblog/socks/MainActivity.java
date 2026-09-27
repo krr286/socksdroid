@@ -44,13 +44,18 @@ public class MainActivity extends AppCompatActivity {
         // Уведомление (только если не показывали)
         checkAndShowNotification();
 
-        // Welcome
-        String welcome = RemoteAssets.getText(this, "text_welcome", "");
-        if (!welcome.isEmpty()) {
-            new androidx.appcompat.app.AlertDialog.Builder(this)
-                .setMessage(welcome)
-                .setPositiveButton("OK", null)
-                .show();
+        // Welcome — только один раз при первом запуске
+        android.content.SharedPreferences welcomePrefs = getSharedPreferences("thek_assets", 0);
+        boolean welcomeShown = welcomePrefs.getBoolean("welcome_shown", false);
+        if (!welcomeShown && savedInstanceState == null) {
+            String welcome = RemoteAssets.getText(this, "text_welcome", "");
+            if (!welcome.isEmpty()) {
+                new androidx.appcompat.app.AlertDialog.Builder(this)
+                    .setMessage(welcome)
+                    .setPositiveButton("OK", null)
+                    .show();
+                welcomePrefs.edit().putBoolean("welcome_shown", true).apply();
+            }
         }
 
         // Общий фон — через window
