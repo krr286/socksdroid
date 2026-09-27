@@ -5,7 +5,6 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
-import android.content.pm.ServiceInfo;
 import android.net.VpnService;
 import android.os.Build;
 import android.os.IBinder;
@@ -56,30 +55,19 @@ public class SocksVpnService extends VpnService {
             return START_STICKY;
         }
 
-        String name = intent.getStringExtra(INTENT_NAME);
-        String server = intent.getStringExtra(INTENT_SERVER);
-        int port = intent.getIntExtra(INTENT_PORT, 1080);
-        String username = intent.getStringExtra(INTENT_USERNAME);
-        String passwd = intent.getStringExtra(INTENT_PASSWORD);
-        String route = intent.getStringExtra(INTENT_ROUTE);
-        String dns = intent.getStringExtra(INTENT_DNS);
-        int dnsPort = intent.getIntExtra(INTENT_DNS_PORT, 53);
-        boolean perApp = intent.getBooleanExtra(INTENT_PER_APP, false);
-        boolean appBypass = intent.getBooleanExtra(INTENT_APP_BYPASS, false);
-        String[] appList = intent.getStringArrayExtra(INTENT_APP_LIST);
-        boolean ipv6 = intent.getBooleanExtra(INTENT_IPV6_PROXY, false);
-        String udpgw = intent.getStringExtra(INTENT_UDP_GW);
-
-        // Null-safe defaults — предотвращаем падение нативного кода
-        if (name == null) name = "VPN";
-        if (server == null) server = "";
-        if (username == null) username = "";
-        if (passwd == null) passwd = "";
-        if (route == null || route.isEmpty()) route = "all";
-        if (dns == null || dns.isEmpty()) dns = "8.8.8.8";
-        if (dnsPort <= 0) dnsPort = 53;
-        if (appList == null) appList = new String[0];
-        if (udpgw == null) udpgw = "";
+        final String name = intent.getStringExtra(INTENT_NAME);
+        final String server = intent.getStringExtra(INTENT_SERVER);
+        final int port = intent.getIntExtra(INTENT_PORT, 1080);
+        final String username = intent.getStringExtra(INTENT_USERNAME);
+        final String passwd = intent.getStringExtra(INTENT_PASSWORD);
+        final String route = intent.getStringExtra(INTENT_ROUTE);
+        final String dns = intent.getStringExtra(INTENT_DNS);
+        final int dnsPort = intent.getIntExtra(INTENT_DNS_PORT, 53);
+        final boolean perApp = intent.getBooleanExtra(INTENT_PER_APP, false);
+        final boolean appBypass = intent.getBooleanExtra(INTENT_APP_BYPASS, false);
+        final String[] appList = intent.getStringArrayExtra(INTENT_APP_LIST);
+        final boolean ipv6 = intent.getBooleanExtra(INTENT_IPV6_PROXY, false);
+        final String udpgw = intent.getStringExtra(INTENT_UDP_GW);
 
         // Notifications on Oreo and above need a channel
         Notification.Builder builder;
@@ -103,20 +91,13 @@ public class SocksVpnService extends VpnService {
         PendingIntent contentIntent;
         contentIntent = PendingIntent.getActivity(this, 0,
                 new Intent(this, MainActivity.class), intentFlags);
-        Notification notif = builder
+        startForeground(NOTIFICATION_ID, builder
                 .setContentTitle(getString(R.string.notify_title))
                 .setContentText(String.format(getString(R.string.notify_msg), name))
                 .setPriority(Notification.PRIORITY_MIN)
                 .setSmallIcon(R.drawable.ic_vpn)
                 .setContentIntent(contentIntent)
-                .build();
-        if (Build.VERSION.SDK_INT >= 34) {
-            startForeground(NOTIFICATION_ID, notif, ServiceInfo.FOREGROUND_SERVICE_TYPE_SYSTEM_EXEMPTED);
-        } else if (Build.VERSION.SDK_INT >= 29) {
-            startForeground(NOTIFICATION_ID, notif, ServiceInfo.FOREGROUND_SERVICE_TYPE_MANIFEST);
-        } else {
-            startForeground(NOTIFICATION_ID, notif);
-        }
+                .build());
 
         // Create an fd.
         configure(name, route, perApp, appBypass, appList, ipv6);
@@ -124,12 +105,8 @@ public class SocksVpnService extends VpnService {
         if (DEBUG)
             Log.d(TAG, "fd: " + mInterface.getFd());
 
-        if (mInterface == null) {
-            Log.e(TAG, "configure() failed — mInterface == null");
-            stopMe();
-            return START_NOT_STICKY;
-        }
-        start(mInterface.getFd(), server, port, username, passwd, dns, dnsPort, ipv6, udpgw);
+        if (mInterface != null)
+            start(mInterface.getFd(), server, port, username, passwd, dns, dnsPort, ipv6, udpgw);
 
         return START_STICKY;
     }

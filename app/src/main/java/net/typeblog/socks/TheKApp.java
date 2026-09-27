@@ -20,7 +20,8 @@ public class TheKApp extends Application {
                 File dir = getExternalFilesDir(null);
                 if (dir != null) {
                     String proc = getCurrentProcessName();
-                    File f = new File(dir, "crash_" + proc + ".txt");
+                    String safeProc = proc.replace(':', '_').replace('/', '_');
+                    File f = new File(dir, "crash_" + safeProc + ".txt");
                     PrintWriter pw = new PrintWriter(f, "UTF-8");
                     pw.println("Time: " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US).format(new Date()));
                     pw.println("Process: " + proc);
