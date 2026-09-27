@@ -62,16 +62,6 @@ public class MainActivity extends AppCompatActivity {
             getWindow().setBackgroundDrawable(bd);
         }
 
-        // Лого
-        android.widget.ImageView logoView = findViewById(R.id.drawer_logo);
-        android.widget.TextView logoText = findViewById(R.id.drawer_logo_text);
-        android.graphics.Bitmap logoBm = RemoteAssets.getBitmap(this, "logo");
-        if (logoBm != null && logoView != null) {
-            logoView.setImageBitmap(logoBm);
-            logoView.setVisibility(android.view.View.VISIBLE);
-            if (logoText != null) logoText.setVisibility(android.view.View.GONE);
-        }
-
         // Drawer фон + логотип из remote
         android.widget.ImageView drawerBg = findViewById(R.id.drawer_bg);
         if (drawerBg != null) {

@@ -42,18 +42,6 @@ public class RemoteAssets {
                   .putString("notification", j.optString("notification", ""))
                   .apply();
 
-                if (newVer <= oldVer) return;
-
-                File dir = cacheDir(app);
-                for (String n : new String[]{"panel", "home", "common", "logo"}) {
-                    byte[] bytes = httpGetBytes(BASE + "/assets/" + n + ".png");
-                    if (bytes != null && bytes.length > 0) {
-                        FileOutputStream fos = new FileOutputStream(new File(dir, n + ".png"));
-                        fos.write(bytes);
-                        fos.close();
-                        Log.d(TAG, "saved " + n + ".png (" + bytes.length + " bytes)");
-                    }
-                }
                 sp.edit().putInt(KEY_VERSION, newVer).apply();
             } catch (Exception e) {
                 Log.e(TAG, "sync: " + e.getMessage());
