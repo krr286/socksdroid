@@ -187,9 +187,7 @@ public class HomeFragment extends Fragment implements ServerAdapter.Listener {
         final String url = input.trim();
         // Если это уже прямая socks5-ссылка — не качаем по HTTP
         if (url.startsWith("socks5://") || url.startsWith("socks://")
-            || url.contains("
-socks5://") || url.contains("
-socks://")) {
+            || url.contains("\nsocks5://") || url.contains("\nsocks://")) {
             parseAndAdd(url);
             return;
         }
@@ -206,8 +204,7 @@ socks://")) {
                     new java.io.InputStreamReader(c.getInputStream()));
                 StringBuilder sb = new StringBuilder();
                 String line;
-                while ((line = br.readLine()) != null) sb.append(line).append("
-");
+                while ((line = br.readLine()) != null) sb.append(line).append("\n");
                 br.close();
                 body = sb.toString();
             } catch (Exception ex) {
