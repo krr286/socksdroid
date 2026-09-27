@@ -10,11 +10,19 @@ import android.widget.TextView;
 public class AboutFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup c, Bundle s) {
+        android.widget.ScrollView sv = new android.widget.ScrollView(getActivity());
         TextView tv = new TextView(getActivity());
-        tv.setText("THEK VPN\n\nVPN & Proxy\n\nВерсия 1.0");
+        String txt = RemoteAssets.getText(getActivity(), "text_about", "THEK VPN
+
+VPN & Proxy
+
+Версия 1.0");
+        tv.setText(txt);
         tv.setTextColor(0xFFFFFFFF);
         tv.setTextSize(16);
         tv.setPadding(48, 80, 48, 48);
-        return tv;
+        tv.setLineSpacing(0, 1.4f);
+        sv.addView(tv);
+        return sv;
     }
 }

@@ -41,6 +41,9 @@ public class MainActivity extends AppCompatActivity {
         setNav(R.id.nav_settings);
         setNav(R.id.nav_about);
 
+        // Уведомление (только если не показывали)
+        checkAndShowNotification();
+
         // Welcome
         String welcome = RemoteAssets.getText(this, "text_welcome", "");
         if (!welcome.isEmpty()) {
@@ -48,6 +51,25 @@ public class MainActivity extends AppCompatActivity {
                 .setMessage(welcome)
                 .setPositiveButton("OK", null)
                 .show();
+        }
+
+        // Общий фон — через window
+        android.graphics.Bitmap commonBm = RemoteAssets.getBitmap(this, "common");
+        if (commonBm != null) {
+            android.graphics.drawable.BitmapDrawable bd =
+                new android.graphics.drawable.BitmapDrawable(getResources(), commonBm);
+            bd.setAlpha(40);  // 0-255, делаем полупрозрачный
+            getWindow().setBackgroundDrawable(bd);
+        }
+
+        // Лого
+        android.widget.ImageView logoView = findViewById(R.id.drawer_logo);
+        android.widget.TextView logoText = findViewById(R.id.drawer_logo_text);
+        android.graphics.Bitmap logoBm = RemoteAssets.getBitmap(this, "logo");
+        if (logoBm != null && logoView != null) {
+            logoView.setImageBitmap(logoBm);
+            logoView.setVisibility(android.view.View.VISIBLE);
+            if (logoText != null) logoText.setVisibility(android.view.View.GONE);
         }
 
         // Drawer фон + логотип из remote
@@ -96,6 +118,23 @@ public class MainActivity extends AppCompatActivity {
             })
             .setNegativeButton("Отмена", null)
             .show();
+    }
+
+    private void checkAndShowNotification() {
+        String notif = RemoteAssets.getText(this, "notification", "");
+        if (notif == null || notif.isEmpty()) return;
+
+        android.content.SharedPreferences sp = getSharedPreferences("thek_assets", 0);
+        String shown = sp.getString("notification_shown", "");
+        if (shown.equals(notif)) return;  // уже показывали это уведомление
+
+        new androidx.appcompat.app.AlertDialog.Builder(this)
+            .setTitle("🔔 Уведомление")
+            .setMessage(notif)
+            .setPositiveButton("OK", null)
+            .show();
+
+        sp.edit().putString("notification_shown", notif).apply();
     }
 
     @Override
