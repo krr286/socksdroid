@@ -225,7 +225,7 @@ public class HomeFragment extends Fragment implements ServerAdapter.Listener {
         String[] lines = data.split("\r?\n");
         int n = 1;
         java.util.regex.Pattern pat = java.util.regex.Pattern.compile(
-            "^socks5?://(?:([^:@/]+):([^@/]+)@)?([^:#/]+):(\d+)(?:#(.+))?$"
+            "^socks5?://(?:([^:@/]+):([^@/]+)@)?([^:#/]+):(\\d+)(?:#(.+))?$"
         );
         for (String raw : lines) {
             String line = raw.trim();
