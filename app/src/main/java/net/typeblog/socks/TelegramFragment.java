@@ -166,8 +166,8 @@ public class TelegramFragment extends Fragment {
         btn.setTextSize(15);
         btn.setTextColor(0xFFFFFFFF);
         btn.setGravity(Gravity.CENTER);
-        btn.setBackgroundColor(0xFF0288D1);
-        btn.setPadding(30, 24, 30, 24);
+        btn.setBackgroundResource(R.drawable.bg_btn_telegram);
+        btn.setPadding(40, 32, 40, 32);
         btn.setOnClickListener(v -> connectTelegram(p));
         card.addView(btn);
 
@@ -193,10 +193,14 @@ public class TelegramFragment extends Fragment {
     private long pingHost(String host, int port) {
         try {
             long start = java.lang.System.currentTimeMillis();
-            java.net.Socket s = new java.net.Socket();
-            s.connect(new java.net.InetSocketAddress(host, port), 3000);
+            java.net.URL url = new java.net.URL("http://" + host + ":8080/health");
+            java.net.HttpURLConnection c = (java.net.HttpURLConnection) url.openConnection();
+            c.setConnectTimeout(3000);
+            c.setReadTimeout(3000);
+            c.setRequestMethod("GET");
+            c.getResponseCode();
             long ms = java.lang.System.currentTimeMillis() - start;
-            s.close();
+            c.disconnect();
             return ms;
         } catch (Exception e) {
             return -1;
