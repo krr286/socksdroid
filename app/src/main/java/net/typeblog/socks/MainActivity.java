@@ -86,12 +86,7 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.nav_telegram) {
             f = new TelegramFragment();
         } else if (id == R.id.nav_servers) {
-            f = new ServersFragment();
-        } else if (id == R.id.nav_theme) {
-            showThemeDialog();
-            mDrawer.closeDrawers();
-            return;
-        } else if (id == R.id.nav_settings) {
+            f = new ServersFragment(); else if (id == R.id.nav_settings) {
             f = new SettingsFragment();
         } else if (id == R.id.nav_about) {
             f = new AboutFragment();
