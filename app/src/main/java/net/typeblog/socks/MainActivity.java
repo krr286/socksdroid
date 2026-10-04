@@ -69,6 +69,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        try {
+            SubscriptionSync.autoSync(this);
+        } catch (Exception ignored) {}
+    }
+
     private void setNav(int id) {
         View v = findViewById(id);
         if (v != null) v.setOnClickListener(view -> selectItem(id));
@@ -119,36 +127,42 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showAddDialog(Fragment currentFragment) {
-        String[] options = {"📝 Добавить вручную", "🔢 Ввести код"};
-        new android.app.AlertDialog.Builder(this)
-            .setTitle("Добавить")
-            .setItems(options, (d, which) -> {
-                if (which == 0) {
-                    // Вручную — открываем HomeFragment.addServer
-                    if (currentFragment instanceof HomeFragment) {
-                        ((HomeFragment) currentFragment).addServer();
-                    } else {
-                        // Переходим на Home и там открываем
-                        selectItem(R.id.nav_home);
-                        new android.os.Handler().postDelayed(() -> {
-                            Fragment f = getFragmentManager().findFragmentById(R.id.fragment_container);
-                            if (f instanceof HomeFragment) ((HomeFragment) f).addServer();
-                        }, 300);
-                    }
-                } else {
-                    // Ввод кода
-                    if (currentFragment instanceof HomeFragment) {
-                        ((HomeFragment) currentFragment).showCodeDialog();
-                    } else {
-                        selectItem(R.id.nav_home);
-                        new android.os.Handler().postDelayed(() -> {
-                            Fragment f = getFragmentManager().findFragmentById(R.id.fragment_container);
-                            if (f instanceof HomeFragment) ((HomeFragment) f).showCodeDialog();
-                        }, 300);
-                    }
-                }
-            })
-            .show();
+        View view = getLayoutInflater().inflate(R.layout.dialog_add, null);
+        android.app.AlertDialog dialog = new android.app.AlertDialog.Builder(this)
+            .setView(view)
+            .create();
+
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        }
+
+        view.findViewById(R.id.opt_manual).setOnClickListener(v -> {
+            dialog.dismiss();
+            if (currentFragment instanceof HomeFragment) {
+                ((HomeFragment) currentFragment).addServer();
+            } else {
+                selectItem(R.id.nav_home);
+                new android.os.Handler().postDelayed(() -> {
+                    Fragment f = getFragmentManager().findFragmentById(R.id.fragment_container);
+                    if (f instanceof HomeFragment) ((HomeFragment) f).addServer();
+                }, 300);
+            }
+        });
+
+        view.findViewById(R.id.opt_code).setOnClickListener(v -> {
+            dialog.dismiss();
+            if (currentFragment instanceof HomeFragment) {
+                ((HomeFragment) currentFragment).showCodeDialog();
+            } else {
+                selectItem(R.id.nav_home);
+                new android.os.Handler().postDelayed(() -> {
+                    Fragment f = getFragmentManager().findFragmentById(R.id.fragment_container);
+                    if (f instanceof HomeFragment) ((HomeFragment) f).showCodeDialog();
+                }, 300);
+            }
+        });
+
+        dialog.show();
     }
 
     @Override

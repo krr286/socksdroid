@@ -73,6 +73,11 @@ public class HomeFragment extends Fragment implements ServerAdapter.Listener {
         }
 
         mConnectBtn = v.findViewById(R.id.connect_button);
+
+        android.widget.ImageButton btnRefresh = v.findViewById(R.id.btn_refresh_home);
+        if (btnRefresh != null) {
+            btnRefresh.setOnClickListener(x -> doRefresh());
+        }
         mConnectIcon = v.findViewById(R.id.connect_icon);
         mStatus = v.findViewById(R.id.home_status);
         mCurrentServer = v.findViewById(R.id.current_server);
@@ -395,4 +400,23 @@ public class HomeFragment extends Fragment implements ServerAdapter.Listener {
             .show();
     }
 
+    
+    private void doRefresh() {
+        android.widget.Toast.makeText(getActivity(), "Обновляю...", android.widget.Toast.LENGTH_SHORT).show();
+        SubscriptionSync.forceSync(getActivity(), (added, removed, error) -> {
+            if (getActivity() == null) return;
+            getActivity().runOnUiThread(() -> {
+                if (error != null) {
+                    android.widget.Toast.makeText(getActivity(),
+                        "Ошибка: " + error, android.widget.Toast.LENGTH_LONG).show();
+                } else {
+                    android.widget.Toast.makeText(getActivity(),
+                        "Готово: +" + added + " / -" + removed,
+                        android.widget.Toast.LENGTH_SHORT).show();
+                    loadProfiles();
+                }
+            });
+        });
     }
+
+}

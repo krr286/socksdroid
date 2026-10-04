@@ -33,6 +33,11 @@ public class ServersFragment extends Fragment implements ServerAdapter.Listener 
         View v = inflater.inflate(R.layout.fragment_servers, c, false);
         mManager = new ProfileManager(getActivity().getApplicationContext());
         mRv = v.findViewById(R.id.servers_rv);
+
+        android.widget.ImageButton btnRefresh = v.findViewById(R.id.btn_refresh_servers);
+        if (btnRefresh != null) {
+            btnRefresh.setOnClickListener(x -> doRefresh());
+        }
         mEmpty = v.findViewById(R.id.servers_empty);
 
         mRv.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -126,4 +131,23 @@ public class ServersFragment extends Fragment implements ServerAdapter.Listener 
             .setNegativeButton("Отмена", null)
             .show();
     }
+
+    private void doRefresh() {
+        android.widget.Toast.makeText(getActivity(), "Обновляю...", android.widget.Toast.LENGTH_SHORT).show();
+        SubscriptionSync.forceSync(getActivity(), (added, removed, error) -> {
+            if (getActivity() == null) return;
+            getActivity().runOnUiThread(() -> {
+                if (error != null) {
+                    android.widget.Toast.makeText(getActivity(),
+                        "Ошибка: " + error, android.widget.Toast.LENGTH_LONG).show();
+                } else {
+                    android.widget.Toast.makeText(getActivity(),
+                        "Готово: +" + added + " / -" + removed,
+                        android.widget.Toast.LENGTH_SHORT).show();
+                    load();
+                }
+            });
+        });
+    }
+
 }
