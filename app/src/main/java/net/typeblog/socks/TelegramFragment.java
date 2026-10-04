@@ -35,7 +35,7 @@ public class TelegramFragment extends Fragment {
         TextView sub = new TextView(getActivity());
         sub.setText("Нажми на прокси, чтобы подключить его в Telegram. Работает без VPN.");
         sub.setTextSize(14);
-        sub.setTextColor(0xFF99FFFFFF);
+        sub.setTextColor(0x99FFFFFF);
         sub.setPadding(0, 0, 0, 40);
         ll.addView(sub);
 
@@ -43,7 +43,7 @@ public class TelegramFragment extends Fragment {
         if (proxies.isEmpty()) {
             TextView empty = new TextView(getActivity());
             empty.setText("Прокси пока не добавлены админом.");
-            empty.setTextColor(0xFF66FFFFFF);
+            empty.setTextColor(0x66FFFFFF);
             empty.setPadding(0, 40, 0, 0);
             ll.addView(empty);
         } else {
