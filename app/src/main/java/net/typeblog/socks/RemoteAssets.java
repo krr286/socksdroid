@@ -72,7 +72,10 @@ public class RemoteAssets {
             for (int i = 0; i < arr.length(); i++) {
                 result.add(arr.getJSONObject(i));
             }
-        } catch (Exception ignored) {}
+        } catch (Exception e) {
+            android.util.Log.e("THEK_NET", "getMtProxies error: " + e.getMessage(), e);
+        }
+        android.util.Log.d("THEK_NET", "getMtProxies returned " + result.size() + " items");
         return result;
     }
 

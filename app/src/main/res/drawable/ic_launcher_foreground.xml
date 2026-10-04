@@ -5,19 +5,19 @@
     android:viewportWidth="108"
     android:viewportHeight="108">
 
-    <!-- Верхняя длинная диагональ: идёт снизу-слева вверх-направо -->
+    <!-- Верхняя длинная диагональ (светло-голубая) -->
     <path
         android:fillColor="#4FC3F7"
-        android:pathData="M30,64 L62,28 L78,28 L46,64 Z" />
+        android:pathData="M20,70 L58,26 L84,26 L46,70 Z" />
 
-    <!-- Нижняя короткая диагональ: параллельно, но короче -->
+    <!-- Нижняя короткая диагональ (средний голубой) -->
     <path
         android:fillColor="#03A9F4"
-        android:pathData="M46,64 L62,48 L74,48 L58,64 Z" />
+        android:pathData="M46,70 L66,50 L84,50 L66,70 Z" />
 
-    <!-- Залом: маленький треугольник вниз-вправо -->
+    <!-- Треугольник залома (тёмно-синий) -->
     <path
         android:fillColor="#01579B"
-        android:pathData="M58,64 L74,48 L74,64 Z" />
+        android:pathData="M66,70 L84,50 L84,70 Z" />
 
 </vector>
