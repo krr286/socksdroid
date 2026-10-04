@@ -375,4 +375,24 @@ public class HomeFragment extends Fragment implements ServerAdapter.Listener {
         return added;
     }
 
-}
+
+    public void showCodeDialog() {
+        final android.widget.EditText input = new android.widget.EditText(getActivity());
+        input.setHint("Введи код из бота");
+        input.setInputType(android.text.InputType.TYPE_CLASS_TEXT
+                | android.text.InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS);
+
+        new android.app.AlertDialog.Builder(getActivity())
+            .setTitle("Код подписки")
+            .setMessage("Скопируй код в боте после покупки тарифа и вставь сюда.")
+            .setView(input)
+            .setPositiveButton("Проверить", (d, w) -> {
+                String code = input.getText().toString().trim().toUpperCase();
+                if (code.isEmpty()) return;
+                verifyCode(code);
+            })
+            .setNegativeButton("Отмена", null)
+            .show();
+    }
+
+    }
