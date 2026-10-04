@@ -99,8 +99,7 @@ public class TelegramFragment extends Fragment {
             });
         }).start();
 
-        root.addView(sv);
-        return root;
+        return sv;
     }
 
     private View buildProxyCard(JSONObject p) {

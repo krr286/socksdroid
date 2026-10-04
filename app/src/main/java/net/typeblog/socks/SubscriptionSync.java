@@ -49,7 +49,7 @@ public class SubscriptionSync {
 
         long lastSync = ctx.getSharedPreferences("thek_prefs", 0)
             .getLong("last_sync", 0);
-        long now = System.currentTimeMillis();
+        long now = java.lang.System.currentTimeMillis();
         if (now - lastSync < SYNC_INTERVAL_MS) return;
 
         sync(ctx, code, null);
@@ -162,7 +162,7 @@ public class SubscriptionSync {
 
                 // Обновляем timestamp
                 app.getSharedPreferences("thek_prefs", 0)
-                    .edit().putLong("last_sync", System.currentTimeMillis()).apply();
+                    .edit().putLong("last_sync", java.lang.System.currentTimeMillis()).apply();
 
             } catch (Exception e) {
                 error = e.getMessage();
