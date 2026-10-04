@@ -112,10 +112,43 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         Fragment f = getFragmentManager().findFragmentById(R.id.fragment_container);
         if (item.getItemId() == R.id.action_add) {
-            if (f instanceof HomeFragment) ((HomeFragment) f).addServer();
+            showAddDialog(f);
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showAddDialog(Fragment currentFragment) {
+        String[] options = {"📝 Добавить вручную", "🔢 Ввести код"};
+        new android.app.AlertDialog.Builder(this)
+            .setTitle("Добавить")
+            .setItems(options, (d, which) -> {
+                if (which == 0) {
+                    // Вручную — открываем HomeFragment.addServer
+                    if (currentFragment instanceof HomeFragment) {
+                        ((HomeFragment) currentFragment).addServer();
+                    } else {
+                        // Переходим на Home и там открываем
+                        selectItem(R.id.nav_home);
+                        new android.os.Handler().postDelayed(() -> {
+                            Fragment f = getFragmentManager().findFragmentById(R.id.fragment_container);
+                            if (f instanceof HomeFragment) ((HomeFragment) f).addServer();
+                        }, 300);
+                    }
+                } else {
+                    // Ввод кода
+                    if (currentFragment instanceof HomeFragment) {
+                        ((HomeFragment) currentFragment).showCodeDialog();
+                    } else {
+                        selectItem(R.id.nav_home);
+                        new android.os.Handler().postDelayed(() -> {
+                            Fragment f = getFragmentManager().findFragmentById(R.id.fragment_container);
+                            if (f instanceof HomeFragment) ((HomeFragment) f).showCodeDialog();
+                        }, 300);
+                    }
+                }
+            })
+            .show();
     }
 
     @Override
