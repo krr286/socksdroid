@@ -74,14 +74,29 @@ public class HomeFragment extends Fragment implements ServerAdapter.Listener {
 
         mConnectBtn = v.findViewById(R.id.connect_button);
 
-        android.widget.ImageButton btnRefresh = v.findViewById(R.id.btn_refresh_home);
-        if (btnRefresh != null) {
-            btnRefresh.setOnClickListener(x -> doRefresh());
-        }
+
         mConnectIcon = v.findViewById(R.id.connect_icon);
         mStatus = v.findViewById(R.id.home_status);
         mCurrentServer = v.findViewById(R.id.current_server);
         mList = v.findViewById(R.id.servers_list);
+
+        // Программно добавляем кнопку «Обновить» над списком серверов
+        try {
+            android.view.ViewGroup parent = (android.view.ViewGroup) mList.getParent();
+            int idx = parent.indexOfChild(mList);
+            android.widget.ImageButton btnRefresh = new android.widget.ImageButton(getActivity());
+            btnRefresh.setImageResource(R.drawable.ic_refresh);
+            btnRefresh.setBackgroundResource(android.R.drawable.btn_default);
+            btnRefresh.setBackgroundColor(0x00000000);
+            android.widget.LinearLayout.LayoutParams lp =
+                new android.widget.LinearLayout.LayoutParams(dp(32), dp(32));
+            lp.gravity = android.view.Gravity.END;
+            lp.rightMargin = dp(16);
+            btnRefresh.setLayoutParams(lp);
+            btnRefresh.setPadding(dp(4), dp(4), dp(4), dp(4));
+            btnRefresh.setOnClickListener(x -> doRefresh());
+            parent.addView(btnRefresh, idx);
+        } catch (Exception ignored) {}
 
         mList.setLayoutManager(new LinearLayoutManager(getActivity()));
         mAdapter = new ServerAdapter(mProfiles, this);
@@ -417,6 +432,11 @@ public class HomeFragment extends Fragment implements ServerAdapter.Listener {
                 }
             });
         });
+    }
+
+
+    private int dp(int dp) {
+        return (int) (dp * getResources().getDisplayMetrics().density);
     }
 
 }
