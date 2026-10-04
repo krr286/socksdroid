@@ -19,47 +19,86 @@ import java.util.List;
 
 public class TelegramFragment extends Fragment {
 
+    private LinearLayout mContainer;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup c, Bundle s) {
         ScrollView sv = new ScrollView(getActivity());
-        LinearLayout ll = new LinearLayout(getActivity());
-        ll.setOrientation(LinearLayout.VERTICAL);
-        ll.setPadding(50, 80, 50, 50);
+        mContainer = new LinearLayout(getActivity());
+        mContainer.setOrientation(LinearLayout.VERTICAL);
+        mContainer.setPadding(50, 80, 50, 50);
 
         TextView header = new TextView(getActivity());
         header.setText("Для Telegram");
         header.setTextSize(26);
         header.setTextColor(0xFFFFFFFF);
         header.setPadding(0, 0, 0, 16);
-        ll.addView(header);
+        mContainer.addView(header);
 
         TextView sub = new TextView(getActivity());
         sub.setText("Нажми на прокси — Telegram сам предложит подключить. Работает без VPN.");
         sub.setTextSize(14);
         sub.setTextColor(0x99FFFFFF);
         sub.setPadding(0, 0, 0, 48);
-        ll.addView(sub);
+        mContainer.addView(sub);
 
-        List<JSONObject> proxies = null;
-        try {
-            proxies = RemoteAssets.getMtProxies(getActivity());
-        } catch (Exception ignored) {}
+        TextView loading = new TextView(getActivity());
+        loading.setText("Загрузка...");
+        loading.setTextColor(0x66FFFFFF);
+        loading.setTextSize(15);
+        loading.setGravity(Gravity.CENTER);
+        loading.setPadding(0, 100, 0, 0);
+        loading.setId(999999);
+        mContainer.addView(loading);
 
-        if (proxies == null || proxies.isEmpty()) {
-            TextView empty = new TextView(getActivity());
-            empty.setText("Прокси пока не добавлены.\nПопроси админа добавить их в боте.");
-            empty.setTextColor(0x66FFFFFF);
-            empty.setTextSize(15);
-            empty.setGravity(Gravity.CENTER);
-            empty.setPadding(0, 100, 0, 0);
-            ll.addView(empty);
-        } else {
-            for (JSONObject p : proxies) {
-                ll.addView(buildProxyCard(p));
+        sv.addView(mContainer);
+
+        // Загружаем в фоне — на главном потоке network запрещён
+        new Thread(() -> {
+            List<JSONObject> proxies = null;
+            String error = null;
+            try {
+                proxies = RemoteAssets.getMtProxies(getActivity());
+            } catch (Exception e) {
+                error = e.getMessage();
+                android.util.Log.e("THEK_TG", "load error: " + e.getMessage(), e);
             }
-        }
 
-        sv.addView(ll);
+            final List<JSONObject> finalProxies = proxies;
+            final String finalError = error;
+
+            if (getActivity() == null) return;
+            getActivity().runOnUiThread(() -> {
+                View loadingView = mContainer.findViewById(999999);
+                if (loadingView != null) mContainer.removeView(loadingView);
+
+                if (finalError != null) {
+                    TextView err = new TextView(getActivity());
+                    err.setText("Ошибка загрузки: " + finalError);
+                    err.setTextColor(0xFFFF3F3F);
+                    err.setTextSize(14);
+                    err.setGravity(Gravity.CENTER);
+                    err.setPadding(0, 60, 0, 0);
+                    mContainer.addView(err);
+                    return;
+                }
+
+                if (finalProxies == null || finalProxies.isEmpty()) {
+                    TextView empty = new TextView(getActivity());
+                    empty.setText("Прокси пока не добавлены.\nПопроси админа добавить их в боте.");
+                    empty.setTextColor(0x66FFFFFF);
+                    empty.setTextSize(15);
+                    empty.setGravity(Gravity.CENTER);
+                    empty.setPadding(0, 100, 0, 0);
+                    mContainer.addView(empty);
+                } else {
+                    for (JSONObject p : finalProxies) {
+                        mContainer.addView(buildProxyCard(p));
+                    }
+                }
+            });
+        }).start();
+
         return sv;
     }
 
@@ -84,7 +123,6 @@ public class TelegramFragment extends Fragment {
         int current = load != null ? load.optInt("current", 0) : 0;
         int max = load != null ? load.optInt("max", 500) : 500;
 
-        // Заголовок + загруженность
         LinearLayout topRow = new LinearLayout(getActivity());
         topRow.setOrientation(LinearLayout.HORIZONTAL);
 
@@ -104,7 +142,6 @@ public class TelegramFragment extends Fragment {
         topRow.addView(loadView);
         card.addView(topRow);
 
-        // Адрес + пинг
         LinearLayout addrRow = new LinearLayout(getActivity());
         addrRow.setOrientation(LinearLayout.HORIZONTAL);
         addrRow.setPadding(0, 8, 0, 20);
@@ -124,7 +161,6 @@ public class TelegramFragment extends Fragment {
         addrRow.addView(pingView);
         card.addView(addrRow);
 
-        // Кнопка
         TextView btn = new TextView(getActivity());
         btn.setText("Подключить в Telegram");
         btn.setTextSize(15);
@@ -135,9 +171,9 @@ public class TelegramFragment extends Fragment {
         btn.setOnClickListener(v -> connectTelegram(p));
         card.addView(btn);
 
-        // Пингуем асинхронно
         new Thread(() -> {
             long ms = pingHost(server, port);
+            if (getActivity() == null) return;
             getActivity().runOnUiThread(() -> {
                 if (ms < 0) {
                     pingView.setText("нет связи");
