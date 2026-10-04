@@ -75,20 +75,56 @@ public class TelegramFragment extends Fragment {
         lp.setMargins(0, 0, 0, 28);
         card.setLayoutParams(lp);
 
+        String flag = p.optString("flag", "");
+        String name = p.optString("name", "Proxy");
+        String server = p.optString("server", "");
+        int port = p.optInt("port", 443);
+
+        JSONObject load = p.optJSONObject("load");
+        int current = load != null ? load.optInt("current", 0) : 0;
+        int max = load != null ? load.optInt("max", 500) : 500;
+
+        // Заголовок + загруженность
+        LinearLayout topRow = new LinearLayout(getActivity());
+        topRow.setOrientation(LinearLayout.HORIZONTAL);
+
         TextView title = new TextView(getActivity());
-        title.setText(p.optString("flag", "") + " " + p.optString("name", "Proxy"));
+        title.setText(flag + " " + name);
         title.setTextSize(18);
         title.setTextColor(0xFFFFFFFF);
-        title.setPadding(0, 0, 0, 10);
-        card.addView(title);
+        title.setLayoutParams(new LinearLayout.LayoutParams(0,
+            LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
+        topRow.addView(title);
+
+        TextView loadView = new TextView(getActivity());
+        String indicator = current < max * 0.5 ? "🟢" : current < max * 0.8 ? "🟡" : "🔴";
+        loadView.setText(indicator + " " + current + "/" + max);
+        loadView.setTextSize(13);
+        loadView.setTextColor(0xFFFFFFFF);
+        topRow.addView(loadView);
+        card.addView(topRow);
+
+        // Адрес + пинг
+        LinearLayout addrRow = new LinearLayout(getActivity());
+        addrRow.setOrientation(LinearLayout.HORIZONTAL);
+        addrRow.setPadding(0, 8, 0, 20);
 
         TextView addr = new TextView(getActivity());
-        addr.setText(p.optString("server", "") + ":" + p.optInt("port", 443));
+        addr.setText(server + ":" + port);
         addr.setTextSize(13);
         addr.setTextColor(0xFF29B6F6);
-        addr.setPadding(0, 0, 0, 20);
-        card.addView(addr);
+        addr.setLayoutParams(new LinearLayout.LayoutParams(0,
+            LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
+        addrRow.addView(addr);
 
+        TextView pingView = new TextView(getActivity());
+        pingView.setText("пинг...");
+        pingView.setTextSize(13);
+        pingView.setTextColor(0x99FFFFFF);
+        addrRow.addView(pingView);
+        card.addView(addrRow);
+
+        // Кнопка
         TextView btn = new TextView(getActivity());
         btn.setText("Подключить в Telegram");
         btn.setTextSize(15);
@@ -99,7 +135,36 @@ public class TelegramFragment extends Fragment {
         btn.setOnClickListener(v -> connectTelegram(p));
         card.addView(btn);
 
+        // Пингуем асинхронно
+        new Thread(() -> {
+            long ms = pingHost(server, port);
+            getActivity().runOnUiThread(() -> {
+                if (ms < 0) {
+                    pingView.setText("нет связи");
+                    pingView.setTextColor(0xFFFF3F3F);
+                } else {
+                    pingView.setText(ms + " мс");
+                    if (ms < 150) pingView.setTextColor(0xFF3FFF7A);
+                    else if (ms < 400) pingView.setTextColor(0xFFFFCC33);
+                    else pingView.setTextColor(0xFFFF3F3F);
+                }
+            });
+        }).start();
+
         return card;
+    }
+
+    private long pingHost(String host, int port) {
+        try {
+            long start = System.currentTimeMillis();
+            java.net.Socket s = new java.net.Socket();
+            s.connect(new java.net.InetSocketAddress(host, port), 3000);
+            long ms = System.currentTimeMillis() - start;
+            s.close();
+            return ms;
+        } catch (Exception e) {
+            return -1;
+        }
     }
 
     private void connectTelegram(JSONObject p) {
