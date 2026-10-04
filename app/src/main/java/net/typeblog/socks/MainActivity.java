@@ -35,12 +35,19 @@ public class MainActivity extends AppCompatActivity {
 
         setNav(R.id.nav_home);
         setNav(R.id.nav_telegram);
-        setNav(R.id.nav_telegram);
         setNav(R.id.nav_servers);
         setNav(R.id.nav_settings);
         setNav(R.id.nav_about);
 
-        // Remote assets sync
+        // Показываем "Для Telegram" только подписчикам
+        android.content.SharedPreferences prefs = getSharedPreferences("thek_prefs", 0);
+        boolean hasSub = prefs.getBoolean("has_subscription", false);
+        if (!hasSub) {
+            View navTg = findViewById(R.id.nav_telegram);
+            if (navTg != null) navTg.setVisibility(View.GONE);
+        }
+
+        // Синхронизация удалённых ресурсов
         try { RemoteAssets.sync(this); } catch (Exception ignored) {}
 
         // Welcome — только один раз
@@ -55,14 +62,6 @@ public class MainActivity extends AppCompatActivity {
                     .show();
                 welcomePrefs.edit().putBoolean("welcome_shown", true).apply();
             }
-        }
-
-        // Показываем "Для Telegram" только если есть подписка
-        android.content.SharedPreferences prefs = getSharedPreferences("thek_prefs", 0);
-        boolean hasSub = prefs.getBoolean("has_subscription", false);
-        if (!hasSub) {
-            View navTg = findViewById(R.id.nav_telegram);
-            if (navTg != null) navTg.setVisibility(View.GONE);
         }
 
         if (savedInstanceState == null) {
@@ -86,7 +85,8 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.nav_telegram) {
             f = new TelegramFragment();
         } else if (id == R.id.nav_servers) {
-            f = new ServersFragment(); else if (id == R.id.nav_settings) {
+            f = new ServersFragment();
+        } else if (id == R.id.nav_settings) {
             f = new SettingsFragment();
         } else if (id == R.id.nav_about) {
             f = new AboutFragment();
@@ -100,23 +100,6 @@ public class MainActivity extends AppCompatActivity {
             .commit();
 
         mDrawer.closeDrawers();
-    }
-
-    private void showThemeDialog() {
-        String cur = ThemeManager.get(this);
-        int idx = 0;
-        for (int i = 0; i < ThemeManager.KEYS.length; i++) {
-            if (ThemeManager.KEYS[i].equals(cur)) idx = i;
-        }
-        new android.app.AlertDialog.Builder(this)
-            .setTitle("Тема")
-            .setSingleChoiceItems(ThemeManager.NAMES, idx, (d, w) -> {
-                ThemeManager.set(this, ThemeManager.KEYS[w]);
-                d.dismiss();
-                recreate();
-            })
-            .setNegativeButton("Отмена", null)
-            .show();
     }
 
     @Override
