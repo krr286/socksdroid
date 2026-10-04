@@ -156,10 +156,10 @@ public class TelegramFragment extends Fragment {
 
     private long pingHost(String host, int port) {
         try {
-            long start = System.currentTimeMillis();
+            long start = java.lang.System.currentTimeMillis();
             java.net.Socket s = new java.net.Socket();
             s.connect(new java.net.InetSocketAddress(host, port), 3000);
-            long ms = System.currentTimeMillis() - start;
+            long ms = java.lang.System.currentTimeMillis() - start;
             s.close();
             return ms;
         } catch (Exception e) {
