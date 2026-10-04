@@ -37,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
         setNav(R.id.nav_telegram);
         setNav(R.id.nav_telegram);
         setNav(R.id.nav_servers);
-        setNav(R.id.nav_theme);
         setNav(R.id.nav_settings);
         setNav(R.id.nav_about);
 
@@ -56,6 +55,14 @@ public class MainActivity extends AppCompatActivity {
                     .show();
                 welcomePrefs.edit().putBoolean("welcome_shown", true).apply();
             }
+        }
+
+        // Показываем "Для Telegram" только если есть подписка
+        android.content.SharedPreferences prefs = getSharedPreferences("thek_prefs", 0);
+        boolean hasSub = prefs.getBoolean("has_subscription", false);
+        if (!hasSub) {
+            View navTg = findViewById(R.id.nav_telegram);
+            if (navTg != null) navTg.setVisibility(View.GONE);
         }
 
         if (savedInstanceState == null) {
