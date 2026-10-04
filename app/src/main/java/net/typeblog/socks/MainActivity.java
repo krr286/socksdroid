@@ -22,7 +22,6 @@ public class MainActivity extends AppCompatActivity {
         ThemeManager.apply(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        RemoteAssets.sync(this);
 
         mDrawer = findViewById(R.id.drawer_layout);
         mToolbar = findViewById(R.id.toolbar);
@@ -32,46 +31,31 @@ public class MainActivity extends AppCompatActivity {
             getSupportActionBar().setHomeAsUpIndicator(android.R.drawable.ic_menu_sort_by_size);
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
-
         mToolbar.setNavigationOnClickListener(v -> mDrawer.openDrawer(GravityCompat.START));
 
         setNav(R.id.nav_home);
+        setNav(R.id.nav_telegram);
+        setNav(R.id.nav_telegram);
         setNav(R.id.nav_servers);
         setNav(R.id.nav_theme);
         setNav(R.id.nav_settings);
         setNav(R.id.nav_about);
 
-        // Уведомление (только если не показывали)
-        checkAndShowNotification();
+        // Remote assets sync
+        try { RemoteAssets.sync(this); } catch (Exception ignored) {}
 
-        // Welcome — только один раз при первом запуске
+        // Welcome — только один раз
         android.content.SharedPreferences welcomePrefs = getSharedPreferences("thek_assets", 0);
         boolean welcomeShown = welcomePrefs.getBoolean("welcome_shown", false);
         if (!welcomeShown && savedInstanceState == null) {
             String welcome = RemoteAssets.getText(this, "text_welcome", "");
-            if (!welcome.isEmpty()) {
+            if (welcome != null && !welcome.isEmpty()) {
                 new androidx.appcompat.app.AlertDialog.Builder(this)
                     .setMessage(welcome)
                     .setPositiveButton("OK", null)
                     .show();
                 welcomePrefs.edit().putBoolean("welcome_shown", true).apply();
             }
-        }
-
-        // Общий фон — через window
-        android.graphics.Bitmap commonBm = RemoteAssets.getBitmap(this, "common");
-        if (commonBm != null) {
-            android.graphics.drawable.BitmapDrawable bd =
-                new android.graphics.drawable.BitmapDrawable(getResources(), commonBm);
-            bd.setAlpha(40);  // 0-255, делаем полупрозрачный
-            getWindow().setBackgroundDrawable(bd);
-        }
-
-        // Drawer фон + логотип из remote
-        android.widget.ImageView drawerBg = findViewById(R.id.drawer_bg);
-        if (drawerBg != null) {
-            android.graphics.Bitmap bm = RemoteAssets.getBitmap(this, "panel");
-            if (bm != null) { drawerBg.setImageBitmap(bm); drawerBg.setAlpha(0.6f); }
         }
 
         if (savedInstanceState == null) {
@@ -85,25 +69,43 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void selectItem(int id) {
-        if (mCurrentNav == id) { mDrawer.closeDrawers(); return; }
+        if (mCurrentNav == id) {
+            mDrawer.closeDrawers();
+            return;
+        }
         mCurrentNav = id;
 
         Fragment f;
-        if (id == R.id.nav_servers) f = new ServersFragment();
-        else if (id == R.id.nav_settings) f = new SettingsFragment();
-        else if (id == R.id.nav_about) f = new AboutFragment();
-        else if (id == R.id.nav_theme) { showThemeDialog(); mDrawer.closeDrawers(); return; }
-        else f = new HomeFragment();
+        if (id == R.id.nav_telegram) {
+            f = new TelegramFragment();
+        } else if (id == R.id.nav_servers) {
+            f = new ServersFragment();
+        } else if (id == R.id.nav_theme) {
+            showThemeDialog();
+            mDrawer.closeDrawers();
+            return;
+        } else if (id == R.id.nav_settings) {
+            f = new SettingsFragment();
+        } else if (id == R.id.nav_about) {
+            f = new AboutFragment();
+        } else {
+            f = new HomeFragment();
+        }
 
-        getFragmentManager().beginTransaction().replace(R.id.fragment_container, f).commit();
+        getFragmentManager()
+            .beginTransaction()
+            .replace(R.id.fragment_container, f)
+            .commit();
+
         mDrawer.closeDrawers();
     }
 
     private void showThemeDialog() {
         String cur = ThemeManager.get(this);
         int idx = 0;
-        for (int i = 0; i < ThemeManager.KEYS.length; i++) if (ThemeManager.KEYS[i].equals(cur)) idx = i;
-
+        for (int i = 0; i < ThemeManager.KEYS.length; i++) {
+            if (ThemeManager.KEYS[i].equals(cur)) idx = i;
+        }
         new android.app.AlertDialog.Builder(this)
             .setTitle("Тема")
             .setSingleChoiceItems(ThemeManager.NAMES, idx, (d, w) -> {
@@ -113,23 +115,6 @@ public class MainActivity extends AppCompatActivity {
             })
             .setNegativeButton("Отмена", null)
             .show();
-    }
-
-    private void checkAndShowNotification() {
-        String notif = RemoteAssets.getText(this, "notification", "");
-        if (notif == null || notif.isEmpty()) return;
-
-        android.content.SharedPreferences sp = getSharedPreferences("thek_assets", 0);
-        String shown = sp.getString("notification_shown", "");
-        if (shown.equals(notif)) return;  // уже показывали это уведомление
-
-        new androidx.appcompat.app.AlertDialog.Builder(this)
-            .setTitle("🔔 Уведомление")
-            .setMessage(notif)
-            .setPositiveButton("OK", null)
-            .show();
-
-        sp.edit().putString("notification_shown", notif).apply();
     }
 
     @Override

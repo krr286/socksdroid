@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,28 +24,34 @@ public class TelegramFragment extends Fragment {
         ScrollView sv = new ScrollView(getActivity());
         LinearLayout ll = new LinearLayout(getActivity());
         ll.setOrientation(LinearLayout.VERTICAL);
-        ll.setPadding(40, 60, 40, 40);
+        ll.setPadding(50, 80, 50, 50);
 
         TextView header = new TextView(getActivity());
-        header.setText("Telegram-прокси");
-        header.setTextSize(24);
+        header.setText("Для Telegram");
+        header.setTextSize(26);
         header.setTextColor(0xFFFFFFFF);
-        header.setPadding(0, 0, 0, 20);
+        header.setPadding(0, 0, 0, 16);
         ll.addView(header);
 
         TextView sub = new TextView(getActivity());
-        sub.setText("Нажми на прокси, чтобы подключить его в Telegram. Работает без VPN.");
+        sub.setText("Нажми на прокси — Telegram сам предложит подключить. Работает без VPN.");
         sub.setTextSize(14);
         sub.setTextColor(0x99FFFFFF);
-        sub.setPadding(0, 0, 0, 40);
+        sub.setPadding(0, 0, 0, 48);
         ll.addView(sub);
 
-        List<JSONObject> proxies = RemoteAssets.getMtProxies(getActivity());
-        if (proxies.isEmpty()) {
+        List<JSONObject> proxies = null;
+        try {
+            proxies = RemoteAssets.getMtProxies(getActivity());
+        } catch (Exception ignored) {}
+
+        if (proxies == null || proxies.isEmpty()) {
             TextView empty = new TextView(getActivity());
-            empty.setText("Прокси пока не добавлены админом.");
+            empty.setText("Прокси пока не добавлены.\nПопроси админа добавить их в боте.");
             empty.setTextColor(0x66FFFFFF);
-            empty.setPadding(0, 40, 0, 0);
+            empty.setTextSize(15);
+            empty.setGravity(Gravity.CENTER);
+            empty.setPadding(0, 100, 0, 0);
             ll.addView(empty);
         } else {
             for (JSONObject p : proxies) {
@@ -59,35 +66,36 @@ public class TelegramFragment extends Fragment {
     private View buildProxyCard(JSONObject p) {
         LinearLayout card = new LinearLayout(getActivity());
         card.setOrientation(LinearLayout.VERTICAL);
-        card.setPadding(30, 30, 30, 30);
+        card.setPadding(40, 40, 40, 40);
         card.setBackgroundColor(0xFF1A1F2E);
 
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.MATCH_PARENT,
             LinearLayout.LayoutParams.WRAP_CONTENT);
-        lp.setMargins(0, 0, 0, 24);
+        lp.setMargins(0, 0, 0, 28);
         card.setLayoutParams(lp);
 
         TextView title = new TextView(getActivity());
         title.setText(p.optString("flag", "") + " " + p.optString("name", "Proxy"));
         title.setTextSize(18);
         title.setTextColor(0xFFFFFFFF);
-        title.setPadding(0, 0, 0, 8);
+        title.setPadding(0, 0, 0, 10);
         card.addView(title);
 
         TextView addr = new TextView(getActivity());
-        addr.setText(p.optString("server") + ":" + p.optInt("port", 443));
+        addr.setText(p.optString("server", "") + ":" + p.optInt("port", 443));
         addr.setTextSize(13);
         addr.setTextColor(0xFF29B6F6);
-        addr.setPadding(0, 0, 0, 16);
+        addr.setPadding(0, 0, 0, 20);
         card.addView(addr);
 
         TextView btn = new TextView(getActivity());
-        btn.setText("  Подключить в Telegram  ");
+        btn.setText("Подключить в Telegram");
         btn.setTextSize(15);
         btn.setTextColor(0xFFFFFFFF);
+        btn.setGravity(Gravity.CENTER);
         btn.setBackgroundColor(0xFF0288D1);
-        btn.setPadding(30, 20, 30, 20);
+        btn.setPadding(30, 24, 30, 24);
         btn.setOnClickListener(v -> connectTelegram(p));
         card.addView(btn);
 
@@ -96,7 +104,10 @@ public class TelegramFragment extends Fragment {
 
     private void connectTelegram(JSONObject p) {
         String link = p.optString("tg_link", "");
-        if (link.isEmpty()) return;
+        if (link.isEmpty()) {
+            Toast.makeText(getActivity(), "Ссылка пустая", Toast.LENGTH_SHORT).show();
+            return;
+        }
         try {
             Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
             i.setPackage("org.telegram.messenger");
