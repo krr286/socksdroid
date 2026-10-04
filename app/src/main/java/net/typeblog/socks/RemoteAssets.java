@@ -60,6 +60,22 @@ public class RemoteAssets {
         return (v == null || v.isEmpty()) ? def : v;
     }
 
+
+    public static java.util.List<org.json.JSONObject> getMtProxies(Context ctx) {
+        java.util.List<org.json.JSONObject> result = new java.util.ArrayList<>();
+        try {
+            String cfg = httpGet(BASE + "/app/config");
+            if (cfg == null) return result;
+            org.json.JSONObject j = new org.json.JSONObject(cfg);
+            org.json.JSONArray arr = j.optJSONArray("mtproxies");
+            if (arr == null) return result;
+            for (int i = 0; i < arr.length(); i++) {
+                result.add(arr.getJSONObject(i));
+            }
+        } catch (Exception ignored) {}
+        return result;
+    }
+
     private static String httpGet(String url) {
         byte[] b = httpGetBytes(url);
         return b == null ? null : new String(b);

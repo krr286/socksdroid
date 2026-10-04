@@ -5,19 +5,24 @@
     android:viewportWidth="108"
     android:viewportHeight="108">
 
-    <!-- Верхняя перекладина Т -->
+    <!-- Верхняя диагональ (светло-голубая) -->
     <path
-        android:fillColor="#FFFFFF"
-        android:pathData="M28,32 L80,32 L80,44 L28,44 Z" />
+        android:fillColor="#4FC3F7"
+        android:pathData="M28,62 L58,32 L76,32 L46,62 Z" />
 
-    <!-- Ножка Т с лёгким закосом вправо -->
+    <!-- Нижняя диагональ (средний голубой) -->
     <path
-        android:fillColor="#FFFFFF"
-        android:pathData="M48,44 L60,44 L62,80 L46,80 Z" />
+        android:fillColor="#29B6F6"
+        android:pathData="M38,72 L58,52 L76,52 L56,72 Z" />
 
-    <!-- Акцентная точка справа внизу -->
+    <!-- Нижний залом (тёмно-синий) -->
     <path
-        android:fillColor="#B388FF"
-        android:pathData="M72,72 m-4,0 a4,4 0 1,0 8,0 a4,4 0 1,0 -8,0" />
+        android:fillColor="#0288D1"
+        android:pathData="M56,72 L76,52 L76,72 L64,72 Z" />
+
+    <!-- Маленький треугольник снизу -->
+    <path
+        android:fillColor="#01579B"
+        android:pathData="M56,72 L76,72 L66,82 Z" />
 
 </vector>

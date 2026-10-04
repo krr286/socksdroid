@@ -107,6 +107,18 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/nav_telegram"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingStart="24dp"
+            android:background="?android:attr/selectableItemBackground">
+            <TextView android:layout_width="24dp" android:layout_height="24dp" android:text="✈" android:textSize="18sp" android:textColor="#29B6F6" android:gravity="center" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:text="Для Telegram" android:textColor="?android:textColorPrimary" android:textSize="15sp" />
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/nav_servers"
             android:layout_width="match_parent"
             android:layout_height="44dp"
